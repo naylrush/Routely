@@ -5,38 +5,37 @@
 import RoutingInterfaces
 import SwiftUI
 
-public struct FlowRootView<Route: RouteProtocol, FlowRoute: FlowRouteProtocol, Destination: View>: View {
+public struct FlowRootView<
+    Route: RouteDestinationProtocol,
+    FlowRoute: FlowRouteProtocol
+>: View {
     public typealias ExpandToRoute = (FlowRoute) -> Route
     public typealias ShrinkToFlowRoute = (Route) -> FlowRoute?
-    public typealias DestinationBuilder = (Route) -> Destination
 
     private let initialRoute: FlowRoute
     private let expandToRoute: ExpandToRoute
     private let shrinkToFlowRoute: ShrinkToFlowRoute
-    private let destination: DestinationBuilder
 
     public init(
         initialRoute: FlowRoute,
         expandToRoute: @escaping ExpandToRoute,
         shrinkToFlowRoute: @escaping ShrinkToFlowRoute,
-        @ViewBuilder destination: @escaping DestinationBuilder
     ) {
         self.initialRoute = initialRoute
         self.expandToRoute = expandToRoute
         self.shrinkToFlowRoute = shrinkToFlowRoute
-        self.destination = destination
     }
 
     public var body: some View {
-        RootView { route in
-            if let flowRoute = shrinkToFlowRoute(route) {
-                WrapToFlow(route: flowRoute)
-            } else {
-                // Fallback to open any type of route (e.g. deep link)
-                // Note: This and subsequent screens will not be connected to the flow until they are dismissed
-                destination(route)
-            }
-        } content: {
+        RootView<Route, _>
+//            if let flowRoute = shrinkToFlowRoute(route) {
+//                WrapToFlow(route: flowRoute)
+//            } else {
+//                // Fallback to open any type of route (e.g. deep link)
+//                // Note: This and subsequent screens will not be connected to the flow until they are dismissed
+//                route.destination
+//            }
+        {
             WrapToFlow(route: initialRoute)
         }
     }
@@ -45,7 +44,6 @@ public struct FlowRootView<Route: RouteProtocol, FlowRoute: FlowRouteProtocol, D
         FlowContentWrapperView(
             route: route,
             expandToRoute: expandToRoute,
-            destination: destination
         )
     }
 }
@@ -56,18 +54,33 @@ public struct FlowRootView<Route: RouteProtocol, FlowRoute: FlowRouteProtocol, D
         initialRoute: PreviewRoute.first,
         expandToRoute: { $0 },
         shrinkToFlowRoute: { $0 },
-        destination: destination
     )
 }
 
-@MainActor
-@ViewBuilder
-private func destination(route: PreviewRoute) -> some View {
-    switch route {
-    case .first: ContentView(route: .first)
-    case .second: ContentView(route: .second)
-    case .third: ContentView(route: .third)
-    case .fourth: ContentView(route: .fourth)
+public enum PreviewRoute {
+    case first
+    case second
+    case third
+    case fourth
+}
+
+extension PreviewRoute: FlowRouteProtocol {
+    public var flowPresentationStyle: FlowPresentationStyle {
+        switch self {
+        case .first, .second, .fourth: .push
+        case .third: .present(.sheet())
+        }
+    }
+}
+
+extension PreviewRoute: RouteDestinationProtocol {
+    public var body: some View {
+        switch self {
+        case .first: ContentView(route: .first)
+        case .second: ContentView(route: .second)
+        case .third: ContentView(route: .third)
+        case .fourth: ContentView(route: .fourth)
+        }
     }
 }
 

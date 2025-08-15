@@ -5,9 +5,8 @@
 import RoutingInterfaces
 import SwiftUI
 
-struct PresentingView<Route: RouteProtocol, Content: View, Destination: View>: View {
+struct PresentingView<Route: RouteDestinationProtocol, Content: View>: View {
     @Bindable var router: Router<Route>
-    @ViewBuilder let destination: (Route) -> Destination
     @ViewBuilder let content: Content
 
     private var fullScreenRoute: Binding<RouteWithResult<Route>?> {
@@ -24,12 +23,9 @@ struct PresentingView<Route: RouteProtocol, Content: View, Destination: View>: V
         content
             .fullScreen(item: fullScreenRoute) { routeWithResult in
                 DestinationConfigurationView(providedRoutingResult: routeWithResult.result) {
-                    RootView.wrap(
-                        if: routeWithResult.route.wrapToRootView,
-                        destination: destination
-                    ) {
+                    RootViewBuilder<Route>.wrap(if: routeWithResult.route.wrapToRootView) {
                         FullScreenContainer {
-                            destination(routeWithResult.route)
+                            routeWithResult.route.destination
                         }
                     }
                 }
@@ -39,11 +35,10 @@ struct PresentingView<Route: RouteProtocol, Content: View, Destination: View>: V
                 behavior: sheetDismissalBehavior
             ) { routeWithResult in
                 DestinationConfigurationView(providedRoutingResult: routeWithResult.result) {
-                    RootView.wrap(
-                        if: routeWithResult.route.wrapToRootView,
-                        destination: destination
-                    ) {
-                        destination(routeWithResult.route)
+                    RootViewBuilder<Route>.wrap(if: routeWithResult.route.wrapToRootView) {
+                        FullScreenContainer {
+                            routeWithResult.route.destination
+                        }
                     }
                 }
             }

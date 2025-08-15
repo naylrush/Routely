@@ -5,9 +5,8 @@
 import RoutingInterfaces
 import SwiftUI
 
-struct StackView<Route: RouteProtocol, Content: View, Destination: View>: View {
+struct StackView<Route: RouteDestinationProtocol, Content: View>: View {
     @Bindable var router: Router<Route>
-    @ViewBuilder let destination: (Route) -> Destination
     @ViewBuilder let content: Content
 
     var body: some View {
@@ -18,7 +17,7 @@ struct StackView<Route: RouteProtocol, Content: View, Destination: View>: View {
             .navigationDestination(for: IdentifiableModel<Route>.self) { identifiedRoute in
                 StackSubviewConfigurationView {
                     StackHierarchyConfigurationView(router: router, id: identifiedRoute.id) {
-                        destination(identifiedRoute.value)
+                        identifiedRoute.value.destination
                     }
                 }
             }

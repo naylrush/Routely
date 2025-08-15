@@ -6,19 +6,20 @@ import OSLog
 import RoutingInterfaces
 import SwiftUI
 
-struct FlowContentWrapperView<Route: RouteProtocol, FlowRoute: FlowRouteProtocol, Destination: View>: View {
+struct FlowContentWrapperView<
+    Route: RouteDestinationProtocol,
+    FlowRoute: FlowRouteProtocol
+>: View {
     typealias ExpandToRoute = (FlowRoute) -> Route
-    typealias DestinationBuilder = (Route) -> Destination
 
     @Environment(Router<Route>.self)
     private var router
 
     let route: FlowRoute
     let expandToRoute: ExpandToRoute
-    let destination: DestinationBuilder
 
     var body: some View {
-        destination(expandToRoute(route))
+        expandToRoute(route).destination
             .environment(\.next, .init(action: goToNext))
     }
 

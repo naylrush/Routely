@@ -7,9 +7,11 @@ import OSLog
 import RoutingInterfaces
 import SwiftUI
 
+public final class EnhancedRouter<Wrapped: RouteProtocol>: Router<EnhancedRoute<Wrapped>>, EnhancedRouterProtocol {}
+
 @MainActor
 @Observable
-public final class Router<Route: RouteProtocol>: RouterProtocol {
+public class Router<Route: RouteProtocol>: RouterProtocol {
     let id = UUID()
 
     var path: [IdentifiableModel<Route>] = []

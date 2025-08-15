@@ -11,6 +11,7 @@ struct OpenURLOverridingView<Route: RouteProtocol, Content: View>: View {
 
     private var openUrlAction: OpenURLAction {
         OpenURLAction { url in
+            // FIXME
 //            router.present(style: .sheet(), .safari(url))
             return .handled
         }

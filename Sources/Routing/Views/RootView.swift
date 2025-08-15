@@ -5,25 +5,18 @@
 import RoutingInterfaces
 import SwiftUI
 
-public struct RootView<Route: RouteProtocol, Content: View, Destination: View>: View {
-    public typealias DestinationBuilder = (Route) -> Destination
-
-    private let destination: DestinationBuilder
+public struct RootView<Route: RouteDestinationProtocol, Content: View>: View {
     private let content: Content
 
-    public init(
-        @ViewBuilder destination: @escaping DestinationBuilder,
-        @ViewBuilder content: () -> Content
-    ) {
-        self.destination = destination
+    public init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
 
     public var body: some View {
-        RouterView { router in
+        RouterView<Route, _> { router in
             OpenURLOverridingView(router: router) {
-                PresentingView(router: router, destination: destination) {
-                    StackView(router: router, destination: destination) {
+                PresentingView(router: router) {
+                    StackView(router: router) {
                         DeepLinkingView(router: router) {
                             content
                         }
@@ -34,27 +27,23 @@ public struct RootView<Route: RouteProtocol, Content: View, Destination: View>: 
     }
 }
 
-extension RootView {
+@MainActor
+public enum RootViewBuilder<Route: RouteDestinationProtocol> {
+    static func make(
+        content: () -> some View
+    ) -> some View {
+        RootView<Route, _>(content: content)
+    }
+
     @ViewBuilder
-    public static func wrap(
+    static func wrap(
         `if` condition: Bool,
-        @ViewBuilder destination: @escaping DestinationBuilder,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: () -> some View
     ) -> some View {
         if condition {
-            RootView(destination: destination, content: content)
+            RootView<Route, _>(content: content)
         } else {
             content()
         }
-    }
-}
-
-@MainActor
-public enum RootViewBuilder<Route: RouteProtocol> {
-    static func make(
-        destination: @escaping (Route) -> some View,
-        content: () -> some View
-    ) -> some View {
-        RootView<Route, _, _>(destination: destination, content: content)
     }
 }

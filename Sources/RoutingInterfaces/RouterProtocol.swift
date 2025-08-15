@@ -24,14 +24,22 @@ public protocol RouterProtocol: Sendable {
     ///   - style: The presentation style to use.
     ///   - route: The destination route.
     ///   - completion: An optional closure executed after the presentation is complete.
-    func present(style: PresentationStyle, _ route: Route, completion: (@MainActor () -> Void)?)
+    func present(
+        style: PresentationStyle,
+        _ route: Route,
+        completion: (@MainActor () -> Void)?
+    )
 
     /// Presents a route with a generic completion result.
     /// - Parameters:
     ///   - style: The presentation style to use.
     ///   - route: The destination route.
     ///   - completion: A closure that receives an optional generic result upon completion.
-    func present<T>(style: PresentationStyle, _ route: Route, completion: @escaping @MainActor (T?) -> Void)
+    func present<T>(
+        style: PresentationStyle,
+        _ route: Route,
+        completion: @escaping @MainActor (T?) -> Void
+    )
 
     /// Stops any ongoing presentation.
     /// - Returns: A Boolean value indicating whether there was an active presentation to stop.
@@ -50,7 +58,11 @@ public protocol RouterProtocol: Sendable {
 }
 
 extension RouterProtocol {
-    public func present(style: PresentationStyle, _ route: Route, completion: (@MainActor () -> Void)? = nil) {
+    public func present(
+        style: PresentationStyle,
+        _ route: Route,
+        completion: (@MainActor () -> Void)? = nil
+    ) {
         present(style: style, route, completion: nil)
     }
 }
