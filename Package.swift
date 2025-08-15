@@ -51,40 +51,22 @@ let package = Package(
             name: "DeepLinking",
             targets: ["DeepLinking"]
         ),
-        .library(
-            name: "Toolbox",
-            targets: ["Toolbox"]
-        ),
-        .library(
-            name: "UIToolbox",
-            targets: ["UIToolbox"]
-        ),
     ],
     dependencies: packageDependencies,
     targets: [
         .target(
-            name: "Toolbox",
-            dependencies: [],
-            plugins: [swiftLintPlugin]
-        ),
-        .target(
-            name: "UIToolbox",
-            dependencies: [],
-            plugins: [swiftLintPlugin]
-        ),
-        .target(
             name: "DeepLinking",
-            dependencies: ["RoutingInterfaces", "Toolbox", "Factory"],
+            dependencies: ["RoutingInterfaces", "Factory"],
             plugins: [swiftLintPlugin]
         ),
         .target(
             name: "Routing",
-            dependencies: ["DeepLinking", "RoutingInterfaces", "Toolbox", "UIToolbox", "DeviceKit"],
+            dependencies: ["DeepLinking", "RoutingInterfaces", "DeviceKit"],
             plugins: [swiftLintPlugin]
         ),
         .target(
             name: "RoutingInterfaces",
-            dependencies: ["Toolbox", "UIToolbox"],
+            dependencies: [],
             plugins: [swiftLintPlugin]
         ),
     ]

@@ -2,8 +2,8 @@
 // Copyright © 2025 Движ
 //
 
+import RoutingInterfaces
 import SwiftUI
-import UIToolbox
 
 struct DismissibleSheetContentContainer<Content: View>: View {
     let confirmationDialogConfiguration: ConfirmationDialogConfiguration?

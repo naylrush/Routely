@@ -3,7 +3,6 @@
 //
 
 import SwiftUI
-import Toolbox
 
 public enum Route: RouteProtocol {
     case safari(URL)

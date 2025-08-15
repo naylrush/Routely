@@ -3,7 +3,6 @@
 //
 
 import Foundation
-import Toolbox
 
 enum LinkParser {
     static func parseDeepLink(url: URL) -> RawDeepLink? {

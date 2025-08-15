@@ -4,7 +4,6 @@
 
 import RoutingInterfaces
 import SwiftUI
-import Toolbox
 
 extension View {
     func fullScreen<Item: Sendable, Content: View>(

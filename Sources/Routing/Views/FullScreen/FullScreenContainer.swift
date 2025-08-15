@@ -4,7 +4,6 @@
 
 import RoutingInterfaces
 import SwiftUI
-import UIToolbox
 
 struct FullScreenContainer<Content: View>: View {
     // Два поля, чтобы во время анимации движения вверх при недостаточном скролле углы продолжали скругляться

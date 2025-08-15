@@ -3,7 +3,6 @@
 //
 
 import Foundation
-import UIToolbox
 
 public enum SheetDismissalBehavior: Hashable, Sendable {
     case `default`

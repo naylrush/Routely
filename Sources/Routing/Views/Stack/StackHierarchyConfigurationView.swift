@@ -5,7 +5,6 @@
 import Factory
 import RoutingInterfaces
 import SwiftUI
-import Toolbox
 
 struct StackHierarchyConfigurationView<Content: View>: View {
     @Injected(\.routingManager)
