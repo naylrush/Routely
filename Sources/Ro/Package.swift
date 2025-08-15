@@ -1,4 +1,4 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,6 +6,12 @@ import PackageDescription
 // MARK: - Dependencies
 
 let localDependenciesNames: [String] = [
+    "ProfileInterfaces",
+    "RoutingInterfaces",
+    "DeepLinking",
+    "SharedModels",
+    "Toolbox",
+    "UIToolbox",
 ]
 
 let localPackageDependencies: [PackageDescription.Package.Dependency] = localDependenciesNames.map { .package(path: "../\($0)") }
@@ -17,12 +23,10 @@ let localTargetDependencies: [PackageDescription.Target.Dependency] = localDepen
 let thirdPartyPackageDependencies: [PackageDescription.Package.Dependency] = [
     .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.57.0"),
     .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.5.0"),
-    .package(url: "https://github.com/hmlongco/Factory.git", from: "2.4.3"),
 ]
 
 let thirdPartyTargetDependencies: [PackageDescription.Target.Dependency] = [
     "DeviceKit",
-    .product(name: "Factory", package: "Factory"),
 ]
 
 let packageDependencies = localPackageDependencies + thirdPartyPackageDependencies
@@ -34,57 +38,21 @@ let swiftLintPlugin: PackageDescription.Target.PluginUsage = .plugin(name: "Swif
 // MARK: - Package
 
 let package = Package(
-    name: "Routely",
+    name: "Routing",
     platforms: [
         .iOS(.v17)
     ],
     products: [
         .library(
-            name: "RoutingInterfaces",
-            targets: ["RoutingInterfaces"]
-        ),
-        .library(
             name: "Routing",
             targets: ["Routing"]
-        ),
-        .library(
-            name: "DeepLinking",
-            targets: ["DeepLinking"]
-        ),
-        .library(
-            name: "Toolbox",
-            targets: ["Toolbox"]
-        ),
-        .library(
-            name: "UIToolbox",
-            targets: ["UIToolbox"]
         ),
     ],
     dependencies: packageDependencies,
     targets: [
         .target(
-            name: "Toolbox",
-            dependencies: [],
-            plugins: [swiftLintPlugin]
-        ),
-        .target(
-            name: "UIToolbox",
-            dependencies: [],
-            plugins: [swiftLintPlugin]
-        ),
-        .target(
-            name: "DeepLinking",
-            dependencies: ["RoutingInterfaces", "Toolbox", "Factory"],
-            plugins: [swiftLintPlugin]
-        ),
-        .target(
             name: "Routing",
-            dependencies: ["DeepLinking", "RoutingInterfaces", "Toolbox", "UIToolbox", "DeviceKit"],
-            plugins: [swiftLintPlugin]
-        ),
-        .target(
-            name: "RoutingInterfaces",
-            dependencies: ["Toolbox", "UIToolbox"],
+            dependencies: targetDependencies,
             plugins: [swiftLintPlugin]
         ),
     ]
