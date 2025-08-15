@@ -6,6 +6,8 @@ import SwiftUI
 
 @MainActor
 public protocol RouterProtocol: Sendable {
+    associatedtype Route: RouteProtocol
+
     /// Pushes a new route onto the navigation path.
     func push(_ route: Route)
 

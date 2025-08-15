@@ -2,15 +2,15 @@
 // Copyright © 2025 Движ
 //
 
+import RoutingInterfaces
 import SwiftUI
 
-struct RouterView<Content: View>: View {
-    @Environment(Router.self)
+struct RouterView<Route: RouteProtocol, Content: View>: View {
+    @Environment(Router<Route>.self)
     private var externalRouter: Router?
 
-    @State private var router = Router()
-
-    @ViewBuilder let content: Content
+    @State private var router = Router<Route>()
+    @ViewBuilder let content: (Router<Route>) -> Content
 
     var body: some View {
         RouterConfigurationView(
@@ -21,8 +21,8 @@ struct RouterView<Content: View>: View {
                 router: router,
                 externalRouter: externalRouter
             ) {
-                RoutingActionsConfigurationView {
-                    content
+                RoutingActionsConfigurationView(router: router) {
+                    content(router)
                 }
             }
         }

@@ -5,7 +5,7 @@
 import Foundation
 import RoutingInterfaces
 
-struct PresentationState: Sendable {
+struct PresentationState<Route: RouteProtocol>: Sendable {
     let style: PresentationStyle
-    let routeWithResult: RouteWithResult
+    let routeWithResult: RouteWithResult<Route>
 }

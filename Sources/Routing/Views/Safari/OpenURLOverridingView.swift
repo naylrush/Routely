@@ -5,15 +5,13 @@
 import RoutingInterfaces
 import SwiftUI
 
-struct OpenURLOverridingView<Content: View>: View {
-    @Environment(Router.self)
-    private var router
-
+struct OpenURLOverridingView<Route: RouteProtocol, Content: View>: View {
+    let router: Router<Route>
     @ViewBuilder let content: Content
 
     private var openUrlAction: OpenURLAction {
         OpenURLAction { url in
-            router.present(style: .sheet(), .safari(url))
+//            router.present(style: .sheet(), .safari(url))
             return .handled
         }
     }

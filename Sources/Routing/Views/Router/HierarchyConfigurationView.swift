@@ -6,12 +6,12 @@ import Factory
 import RoutingInterfaces
 import SwiftUI
 
-struct HierarchyConfigurationView<Content: View>: View {
+struct HierarchyConfigurationView<Route: RouteProtocol, Content: View>: View {
     @Injected(\.routingManager)
     private var routingManager
 
-    let router: Router
-    let externalRouter: Router?
+    let router: Router<Route>
+    let externalRouter: Router<Route>?
 
     @ViewBuilder let content: Content
 

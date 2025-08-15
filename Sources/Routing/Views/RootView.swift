@@ -5,7 +5,7 @@
 import RoutingInterfaces
 import SwiftUI
 
-public struct RootView<Content: View, Destination: View>: View {
+public struct RootView<Route: RouteProtocol, Content: View, Destination: View>: View {
     public typealias DestinationBuilder = (Route) -> Destination
 
     private let destination: DestinationBuilder
@@ -20,11 +20,11 @@ public struct RootView<Content: View, Destination: View>: View {
     }
 
     public var body: some View {
-        RouterView {
-            OpenURLOverridingView {
-                PresentingView(destination: destination) {
-                    StackView(destination: destination) {
-                        DeepLinkingView {
+        RouterView { router in
+            OpenURLOverridingView(router: router) {
+                PresentingView(router: router, destination: destination) {
+                    StackView(router: router, destination: destination) {
+                        DeepLinkingView(router: router) {
                             content
                         }
                     }
@@ -46,5 +46,15 @@ extension RootView {
         } else {
             content()
         }
+    }
+}
+
+@MainActor
+public enum RootViewBuilder<Route: RouteProtocol> {
+    static func make(
+        destination: @escaping (Route) -> some View,
+        content: () -> some View
+    ) -> some View {
+        RootView<Route, _, _>(destination: destination, content: content)
     }
 }

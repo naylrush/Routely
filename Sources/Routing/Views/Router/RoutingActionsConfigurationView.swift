@@ -5,13 +5,11 @@
 import RoutingInterfaces
 import SwiftUI
 
-struct RoutingActionsConfigurationView<Content: View>: View {
+struct RoutingActionsConfigurationView<Route: RouteProtocol, Content: View>: View {
     @Environment(\.finishWholeRoute)
     private var finishWholeRoute
 
-    @Environment(Router.self)
-    private var router
-
+    let router: Router<Route>
     @ViewBuilder let content: Content
 
     var body: some View {

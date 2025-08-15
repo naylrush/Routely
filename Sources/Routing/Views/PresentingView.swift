@@ -5,24 +5,19 @@
 import RoutingInterfaces
 import SwiftUI
 
-struct PresentingView<Content: View, Destination: View>: View {
-    @Environment(Router.self)
-    private var router: Router
-
+struct PresentingView<Route: RouteProtocol, Content: View, Destination: View>: View {
+    @Bindable var router: Router<Route>
     @ViewBuilder let destination: (Route) -> Destination
     @ViewBuilder let content: Content
 
-    private var fullScreenRoute: Binding<RouteWithResult?> {
-        @Bindable var router = router
-        return $router.presentationState.route(withStyle: .fullScreen)
+    private var fullScreenRoute: Binding<RouteWithResult<Route>?> {
+        route($router.presentationState, withStyle: .fullScreen)
     }
-    private var sheetRoute: Binding<RouteWithResult?> {
-        @Bindable var router = router
-        return $router.presentationState.route(withStyle: .sheet())
+    private var sheetRoute: Binding<RouteWithResult<Route>?> {
+        route($router.presentationState, withStyle: .sheet())
     }
     private var sheetDismissalBehavior: Binding<SheetDismissalBehavior> {
-        @Bindable var router = router
-        return $router.presentationState.sheetDismissalBehavior()
+        $router.presentationState.map { $0?.style.sheetDismissalBehavior ?? .default }
     }
 
     var body: some View {
@@ -55,19 +50,12 @@ struct PresentingView<Content: View, Destination: View>: View {
     }
 }
 
-extension Binding<PresentationState?> {
-    fileprivate func route(
-        withStyle style: PresentationStyle
-    ) -> Binding<RouteWithResult?> {
-        mapOptional { state in
-            if state.style.isSameKind(as: style) { state.routeWithResult } else { nil }
-        }
-    }
-
-    fileprivate func sheetDismissalBehavior() -> Binding<SheetDismissalBehavior> {
-        map { state in
-            state?.style.sheetDismissalBehavior ?? .default
-        }
+private func route<Route: RouteProtocol>(
+    _ base: Binding<PresentationState<Route>?>,
+    withStyle style: PresentationStyle
+) -> Binding<RouteWithResult<Route>?> {
+    base.mapOptional { state in
+        if state.style.isSameKind(as: style) { state.routeWithResult } else { nil }
     }
 }
 

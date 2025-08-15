@@ -5,7 +5,7 @@
 import RoutingInterfaces
 import SwiftUI
 
-public struct FlowRootView<FlowRoute: FlowRouteProtocol, Destination: View>: View {
+public struct FlowRootView<Route: RouteProtocol, FlowRoute: FlowRouteProtocol, Destination: View>: View {
     public typealias ExpandToRoute = (FlowRoute) -> Route
     public typealias ShrinkToFlowRoute = (Route) -> FlowRoute?
     public typealias DestinationBuilder = (Route) -> Destination
@@ -54,29 +54,20 @@ public struct FlowRootView<FlowRoute: FlowRouteProtocol, Destination: View>: Vie
 #Preview {
     FlowRootView(
         initialRoute: PreviewRoute.first,
-        expandToRoute: { ._preview($0) },
-        shrinkToFlowRoute: { route in
-            switch route {
-            case let ._preview(previewRoute): previewRoute
-            default: nil
-            }
-        },
+        expandToRoute: { $0 },
+        shrinkToFlowRoute: { $0 },
         destination: destination
     )
 }
 
 @MainActor
 @ViewBuilder
-private func destination(route: Route) -> some View {
+private func destination(route: PreviewRoute) -> some View {
     switch route {
-    case let ._preview(previewRoute):
-        switch previewRoute {
-        case .first: ContentView(route: .first)
-        case .second: ContentView(route: .second)
-        case .third: ContentView(route: .third)
-        case .fourth: ContentView(route: .fourth)
-        }
-    default: Text("Unknown")
+    case .first: ContentView(route: .first)
+    case .second: ContentView(route: .second)
+    case .third: ContentView(route: .third)
+    case .fourth: ContentView(route: .fourth)
     }
 }
 

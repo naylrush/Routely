@@ -9,12 +9,12 @@ import SwiftUI
 
 @MainActor
 @Observable
-public final class Router: RouterProtocol {
+public final class Router<Route: RouteProtocol>: RouterProtocol {
     let id = UUID()
 
     var path: [IdentifiableModel<Route>] = []
 
-    var presentationState: PresentationState? {
+    var presentationState: PresentationState<Route>? {
         willSet { _willSetPresentationState(presentationState) }
     }
 
@@ -127,7 +127,7 @@ public final class Router: RouterProtocol {
 }
 
 extension Router {
-    private func _willSetPresentationState(_ oldValue: PresentationState?) {
+    private func _willSetPresentationState(_ oldValue: PresentationState<Route>?) {
         guard let oldValue else {
             return
         }

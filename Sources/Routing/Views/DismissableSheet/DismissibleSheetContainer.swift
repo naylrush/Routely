@@ -96,7 +96,7 @@ extension View {
 #Preview("Default behavior") {
     @Previewable @State var isPresented = false
 
-    PreviewRootView {
+    PreviewRootView<PreviewRoute, _> {
         Button("Show bottom sheet") {
             isPresented = true
         }
@@ -112,7 +112,7 @@ extension View {
 #Preview("Requires confirmation behavior") {
     @Previewable @State var isPresented = false
 
-    PreviewRootView {
+    PreviewRootView<PreviewRoute, _> {
         Button("Show bottom sheet") {
             isPresented = true
         }

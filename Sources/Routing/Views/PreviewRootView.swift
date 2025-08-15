@@ -5,21 +5,27 @@
 import RoutingInterfaces
 import SwiftUI
 
-public struct PreviewRootView<Content: View>: View {
-    private let content: () -> Content
+public struct PreviewRootView<Route: RouteProtocol, Content: View>: View {
+    private let content: Content
 
-    public init(@ViewBuilder content: @escaping () -> Content) {
-        self.content = content
+    public init(@ViewBuilder content: () -> Content) {
+        self.content = content()
     }
 
     public var body: some View {
-        RootView(
-            destination: DescribingDestination,
-            content: content
-        )
+        RootView(destination: DescribingDestination) {
+            content
+        }
     }
 
     private func DescribingDestination(_ route: Route) -> some View {
         Text(String(describing: route))
+    }
+}
+
+@MainActor
+public enum PreviewRootViewBuilder<Route: RouteProtocol> {
+    static func make(content: () -> some View) -> some View {
+        PreviewRootView<Route, _>(content: content)
     }
 }

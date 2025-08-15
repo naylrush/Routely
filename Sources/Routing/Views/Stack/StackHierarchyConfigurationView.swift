@@ -6,12 +6,11 @@ import Factory
 import RoutingInterfaces
 import SwiftUI
 
-struct StackHierarchyConfigurationView<Content: View>: View {
+struct StackHierarchyConfigurationView<Route: RouteProtocol, Content: View>: View {
     @Injected(\.routingManager)
     private var routingManager
 
-    @Environment(Router.self)
-    private var router
+    let router: Router<Route>
 
     // nil for root view of stack
     let id: IdentifiableModel<Route>.ID?

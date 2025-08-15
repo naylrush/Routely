@@ -8,10 +8,7 @@ import OSLog
 import RoutingInterfaces
 import SwiftUI
 
-struct DeepLinkingView<Content: View>: View {
-    @Environment(Router.self)
-    private var router
-
+struct DeepLinkingView<Route: RouteProtocol, Content: View>: View {
     @Environment(\.isTopHierarchy)
     private var isTopHierarchy
 
@@ -24,6 +21,7 @@ struct DeepLinkingView<Content: View>: View {
     @Injected(\.deepLinkRegistry)
     private var deepLinkRegistry
 
+    let router: Router<Route>
     @ViewBuilder let content: Content
 
     var body: some View {

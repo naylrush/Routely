@@ -9,5 +9,5 @@ import RoutingInterfaces
 public protocol Handler: Sendable {
     associatedtype DeepLink: DeepLinkProtocol
 
-    func handle(router: RouterProtocol, deepLink: DeepLink) async throws
+    func handle<Router: RouterProtocol>(router: Router, deepLink: DeepLink) async throws
 }
