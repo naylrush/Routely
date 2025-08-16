@@ -6,20 +6,14 @@ import OSLog
 import RoutingInterfaces
 import SwiftUI
 
-struct FlowContentWrapperView<
-    Route: RouteDestinationProtocol,
-    FlowRoute: FlowRouteProtocol
->: View {
-    typealias ExpandToRoute = (FlowRoute) -> Route
-
-    @Environment(Router<Route>.self)
+struct FlowContentWrapperView<FlowRoute: FlowRouteDestinationProtocol>: View {
+    @Environment(Router<FlowRoute.Base>.self)
     private var router
 
     let route: FlowRoute
-    let expandToRoute: ExpandToRoute
 
     var body: some View {
-        expandToRoute(route).destination
+        route.destination
             .environment(\.next, .init(action: goToNext))
     }
 
@@ -39,7 +33,10 @@ struct FlowContentWrapperView<
         }
 
         let nextFlowRoute = FlowRoute.allCases[nextIndex]
-        let nextRoute = expandToRoute(nextFlowRoute)
+        guard let nextRoute = nextFlowRoute.toBase() else {
+            logger.fault("Base convertion failed")
+            return
+        }
 
         switch nextFlowRoute.flowPresentationStyle {
         case .push:

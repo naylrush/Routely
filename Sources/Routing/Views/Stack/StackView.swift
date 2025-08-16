@@ -10,7 +10,7 @@ struct StackView<Route: RouteDestinationProtocol, Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        NavigationStack(path: $router.path) {
+        NavigationStack(path: $router.state.path) {
             StackHierarchyConfigurationView(router: router, id: nil) {
                 content
             }

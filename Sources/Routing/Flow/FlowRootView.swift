@@ -5,56 +5,21 @@
 import RoutingInterfaces
 import SwiftUI
 
-public struct FlowRootView<
-    Route: RouteDestinationProtocol,
-    FlowRoute: FlowRouteProtocol
->: View {
-    public typealias ExpandToRoute = (FlowRoute) -> Route
-    public typealias ShrinkToFlowRoute = (Route) -> FlowRoute?
-
+public struct FlowRootView<FlowRoute: FlowRouteDestinationProtocol>: View {
     private let initialRoute: FlowRoute
-    private let expandToRoute: ExpandToRoute
-    private let shrinkToFlowRoute: ShrinkToFlowRoute
 
-    public init(
-        initialRoute: FlowRoute,
-        expandToRoute: @escaping ExpandToRoute,
-        shrinkToFlowRoute: @escaping ShrinkToFlowRoute,
-    ) {
+    public init(initialRoute: FlowRoute) {
         self.initialRoute = initialRoute
-        self.expandToRoute = expandToRoute
-        self.shrinkToFlowRoute = shrinkToFlowRoute
     }
 
     public var body: some View {
-        RootView<Route, _>
-//            if let flowRoute = shrinkToFlowRoute(route) {
-//                WrapToFlow(route: flowRoute)
-//            } else {
-//                // Fallback to open any type of route (e.g. deep link)
-//                // Note: This and subsequent screens will not be connected to the flow until they are dismissed
-//                route.destination
-//            }
-        {
-            WrapToFlow(route: initialRoute)
-        }
-    }
-
-    private func WrapToFlow(route: FlowRoute) -> some View {
-        FlowContentWrapperView(
-            route: route,
-            expandToRoute: expandToRoute,
-        )
+        ProxyRootView(route: ProxyFlowRoute(initialRoute))
     }
 }
 
 #if DEBUG
 #Preview {
-    FlowRootView(
-        initialRoute: PreviewRoute.first,
-        expandToRoute: { $0 },
-        shrinkToFlowRoute: { $0 },
-    )
+    FlowRootView(initialRoute: PreviewRoute.first)
 }
 
 public enum PreviewRoute {
@@ -62,12 +27,13 @@ public enum PreviewRoute {
     case second
     case third
     case fourth
+    case fifth
 }
 
-extension PreviewRoute: FlowRouteProtocol {
+extension PreviewRoute: FlowRouteDestinationProtocol {
     public var flowPresentationStyle: FlowPresentationStyle {
         switch self {
-        case .first, .second, .fourth: .push
+        case .first, .second, .fourth, .fifth: .push
         case .third: .present(.sheet())
         }
     }
@@ -80,6 +46,7 @@ extension PreviewRoute: RouteDestinationProtocol {
         case .second: ContentView(route: .second)
         case .third: ContentView(route: .third)
         case .fourth: ContentView(route: .fourth)
+        case .fifth: ContentView(route: .fifth)
         }
     }
 }
@@ -98,10 +65,12 @@ private struct ContentView: View {
             Text(String(describing: route))
 
             Button {
-                if route == .third {
+                if case .present = route.flowPresentationStyle {
                     dismiss()
                 }
-                next()
+                Task {
+                    next()
+                }
             } label: {
                 Text("Push Next")
                     .foregroundStyle(.black)

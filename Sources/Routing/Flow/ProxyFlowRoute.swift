@@ -1,0 +1,39 @@
+//
+// Copyright © 2025 Движ
+//
+
+import RoutingInterfaces
+import SwiftUI
+
+struct ProxyFlowRoute<FlowRoute: FlowRouteDestinationProtocol>: FlowRouteDestinationProtocol {
+    let route: FlowRoute
+
+    nonisolated init(_ route: FlowRoute) {
+        self.route = route
+    }
+
+    // CaseIterable
+    nonisolated static var allCases: [ProxyFlowRoute<FlowRoute>] {
+        FlowRoute.allCases.map { Self.init($0) }
+    }
+
+    // ProxyRouteProtocol
+    typealias Base = FlowRoute.Base
+
+    nonisolated init?(_ base: FlowRoute.Base) {
+        if let route = FlowRoute(base) {
+            self.route = route
+        } else {
+            return nil
+        }
+    }
+
+    nonisolated func toBase() -> FlowRoute.Base? {
+        route.toBase()
+    }
+
+    // View
+    var body: some View {
+        FlowContentWrapperView(route: route)
+    }
+}

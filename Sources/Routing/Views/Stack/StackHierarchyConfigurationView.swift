@@ -19,6 +19,6 @@ struct StackHierarchyConfigurationView<Route: RouteProtocol, Content: View>: Vie
 
     var body: some View {
         content
-            .environment(\.isLastInStack, router.path.last?.id == id)
+            .environment(\.isLastInStack, router.state.path.last?.id == id)
     }
 }

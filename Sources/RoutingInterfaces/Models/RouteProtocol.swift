@@ -13,10 +13,17 @@ extension RouteProtocol {
     public var wrapToRootView: Bool { true }
 }
 
-public protocol RouteDestinationProtocol: RouteProtocol, View {}
+public protocol RouteDestinationProtocol: RouteProtocol, View {
+    typealias Destination = Body
+}
 
 extension RouteDestinationProtocol {
-    public typealias Destination = Body
-
     public var destination: Destination { body }
 }
+
+public protocol ProxyRouteProtocol: RouteProtocol, Proxy where Base: RouteProtocol {}
+
+public protocol ProxyRouteDestinationProtocol:
+    RouteDestinationProtocol,
+    ProxyRouteProtocol
+where Base: RouteDestinationProtocol {}

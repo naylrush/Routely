@@ -5,7 +5,7 @@
 import SwiftUI
 
 @MainActor
-public protocol RouterProtocol: Sendable {
+public protocol RouterProtocol<Route>: AnyObject, Sendable, Observable {
     associatedtype Route: RouteProtocol
 
     /// Pushes a new route onto the navigation path.

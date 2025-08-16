@@ -4,10 +4,16 @@
 
 import Foundation
 
-public enum EnhancedRoute<Wrapped: RouteProtocol>: RouteProtocol {
-    public typealias Wrapped = Wrapped
-
-    case wrapped(Wrapped)
+public enum EnhancedRoute<Base: RouteProtocol>: ProxyRouteProtocol {
+    case wrapped(Base)
 
     case safari(URL)
+
+    public init?(_ base: Base) {
+        self = .wrapped(base)
+    }
+
+    public func toBase() -> Base? {
+        nil
+    }
 }

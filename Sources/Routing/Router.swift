@@ -7,18 +7,11 @@ import OSLog
 import RoutingInterfaces
 import SwiftUI
 
-public final class EnhancedRouter<Wrapped: RouteProtocol>: Router<EnhancedRoute<Wrapped>>, EnhancedRouterProtocol {}
-
-@MainActor
 @Observable
 public class Router<Route: RouteProtocol>: RouterProtocol {
     let id = UUID()
 
-    var path: [IdentifiableModel<Route>] = []
-
-    var presentationState: PresentationState<Route>? {
-        willSet { _willSetPresentationState(presentationState) }
-    }
+    var state = RouterState<Route>()
 
     @ObservationIgnored var onExternalRouterDismiss: (() -> Void)?
 
@@ -26,22 +19,22 @@ public class Router<Route: RouteProtocol>: RouterProtocol {
 
     public func push(_ route: Route) {
         logger.debug("Pushing \(String(describing: route))")
-        path.append(IdentifiableModel(value: route))
+        state.path.append(IdentifiableModel(value: route))
     }
 
     @discardableResult
     public func pop() -> Bool {
-        guard !path.isEmpty else {
+        guard !state.path.isEmpty else {
             return false
         }
         logger.debug("Popping")
-        path.removeLast()
+        state.path.removeLast()
         return true
     }
 
     public func popToRoot() {
         logger.debug("Popping to route")
-        path.removeLast(path.count)
+        state.path.removeLast(state.path.count)
     }
 
     public func present(
@@ -78,7 +71,7 @@ public class Router<Route: RouteProtocol>: RouterProtocol {
             "Presenting \(style) \(String(describing: route)), routing result id: \(String(describing: result?.id))"
         )
 
-        presentationState = PresentationState(
+        state.presentationState = PresentationState(
             style: style,
             routeWithResult: .init(route: route, result: result)
         )
@@ -86,12 +79,12 @@ public class Router<Route: RouteProtocol>: RouterProtocol {
 
     @discardableResult
     public func stopPresenting() -> Bool {
-        guard let presentationState else {
+        guard let presentationState = state.presentationState else {
             return false
         }
         let route = presentationState.routeWithResult.route
         logger.debug("Stopping presenting \(presentationState.style) \(String(describing: route))")
-        self.presentationState = nil
+        state.presentationState = nil
         return true
     }
 
@@ -128,20 +121,4 @@ public class Router<Route: RouteProtocol>: RouterProtocol {
     }
 }
 
-extension Router {
-    private func _willSetPresentationState(_ oldValue: PresentationState<Route>?) {
-        guard let oldValue else {
-            return
-        }
-
-        guard let result = oldValue.routeWithResult.result else {
-            logger.debug("Completing presentation without result")
-            return
-        }
-
-        logger.debug("Completing presentation with result id: \(result.id)")
-        result.complete()
-    }
-}
-
-private let logger = Logger(subsystem: "Routing", category: "RouterImpl")
+private let logger = Logger(subsystem: "Routing", category: "Router")

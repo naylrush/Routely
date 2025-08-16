@@ -5,43 +5,41 @@
 import RoutingInterfaces
 import SwiftUI
 
-struct PresentingView<Route: RouteDestinationProtocol, Content: View>: View {
+struct PresentingView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
     @Bindable var router: Router<Route>
     @ViewBuilder let content: Content
 
     private var fullScreenRoute: Binding<RouteWithResult<Route>?> {
-        route($router.presentationState, withStyle: .fullScreen)
+        route($router.state.presentationState, withStyle: .fullScreen)
     }
     private var sheetRoute: Binding<RouteWithResult<Route>?> {
-        route($router.presentationState, withStyle: .sheet())
+        route($router.state.presentationState, withStyle: .sheet())
     }
     private var sheetDismissalBehavior: Binding<SheetDismissalBehavior> {
-        $router.presentationState.map { $0?.style.sheetDismissalBehavior ?? .default }
+        $router.state.presentationState.map { $0?.style.sheetDismissalBehavior ?? .default }
     }
 
     var body: some View {
         content
             .fullScreen(item: fullScreenRoute) { routeWithResult in
-                DestinationConfigurationView(providedRoutingResult: routeWithResult.result) {
-                    RootViewBuilder<Route>.wrap(if: routeWithResult.route.wrapToRootView) {
-                        FullScreenContainer {
-                            routeWithResult.route.destination
-                        }
-                    }
+                DestinationWrapper(routeWithResult: routeWithResult) { destination in
+                    FullScreenContainer { destination }
                 }
             }
-            .dismissibleSheet(
-                item: sheetRoute,
-                behavior: sheetDismissalBehavior
-            ) { routeWithResult in
-                DestinationConfigurationView(providedRoutingResult: routeWithResult.result) {
-                    RootViewBuilder<Route>.wrap(if: routeWithResult.route.wrapToRootView) {
-                        FullScreenContainer {
-                            routeWithResult.route.destination
-                        }
-                    }
-                }
+            .dismissibleSheet(item: sheetRoute, behavior: sheetDismissalBehavior) { routeWithResult in
+                DestinationWrapper(routeWithResult: routeWithResult) { $0 }
             }
+    }
+
+    private func DestinationWrapper<WrappedContent: View>(
+        routeWithResult: RouteWithResult<Route>,
+        @ViewBuilder wrapping: (Route.Destination) -> WrappedContent
+    ) -> some View {
+        DestinationConfigurationView(providedRoutingResult: routeWithResult.result) {
+            ProxyRootViewBuilder<Route>.wrap(if: routeWithResult.route.wrapToRootView) {
+                wrapping(routeWithResult.route.destination)
+            }
+        }
     }
 }
 
