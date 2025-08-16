@@ -27,7 +27,7 @@ public struct RoutelyAction<T>: Sendable {
 
     @MainActor
     public func callAsFunction(_ value: T) {
-        logger.debug("Did call routing action")
+        logger.debug("Did call routing action with value: \(String(describing: value))")
         action(value)
     }
 }

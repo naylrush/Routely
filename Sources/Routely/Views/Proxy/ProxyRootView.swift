@@ -9,9 +9,15 @@ struct ProxyRootView<Route: ProxyRouteDestinationProtocol, Content: View>: View 
     @ViewBuilder let content: Content
 
     var body: some View {
-        ProxyEnhancedRouterHolderView<Route, _> { router in
-            RootContentView(router: router) {
-                content
+        RouterConfigurationView<Route, _> { router in
+            OpenURLOverridingView(router: router) {
+                PresentingView(router: router) {
+                    StackView(router: router) {
+                        DeepLinkingView(router: router) {
+                            content
+                        }
+                    }
+                }
             }
         }
     }

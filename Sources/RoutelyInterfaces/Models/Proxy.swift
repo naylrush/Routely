@@ -29,12 +29,12 @@ public protocol Proxy {
     func toBase() -> Base?
 }
 
-extension Proxy where Base == Self {
-    public init?(_ base: Base) {
+extension Proxy {
+    public init?(_ base: Self) {
         self = base
     }
 
-    public func toBase() -> Base? {
+    public func toBase() -> Self? {
         self
     }
 }

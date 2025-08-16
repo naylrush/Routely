@@ -68,9 +68,7 @@ private struct ContentView: View {
                 if case .present = route.flowPresentationStyle {
                     dismiss()
                 }
-                Task {
-                    next()
-                }
+                next()
             } label: {
                 Text("Push Next")
                     .foregroundStyle(.black)

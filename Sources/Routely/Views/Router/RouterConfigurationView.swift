@@ -5,15 +5,17 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct RouterConfigurationView<Route: RouteDestinationProtocol, Content: View>: View {
-    @Environment(EnhancedRouter<Route>.self)
+struct RouterConfigurationView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
+    @Environment(EnhancedRouter<Route.Base>.self)
     private var externalRouter: EnhancedRouter?
 
-    let router: EnhancedRouter<Route>
+    @State private var proxyRouter = ProxyEnhancedRouter<Route>()
 
-    @ViewBuilder let content: Content
+    @ViewBuilder let content: (EnhancedRouter<Route>) -> Content
 
     var body: some View {
+        let router = proxyRouter.wrapped
+
         ExternalRouterConfigurationView(
             externalRouter: externalRouter,
             router: router
@@ -23,9 +25,10 @@ struct RouterConfigurationView<Route: RouteDestinationProtocol, Content: View>: 
                 router: router
             ) {
                 RoutelyActionsConfigurationView(router: router) {
-                    content
+                    content(proxyRouter)
                 }
             }
         }
+        .environment(router)
     }
 }

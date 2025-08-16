@@ -5,9 +5,21 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct DummyProxyRoute<Route: RouteDestinationProtocol>: ProxyRouteDestinationProtocol {
+private struct DummyProxyRoute<Route: RouteDestinationProtocol>: ProxyRouteDestinationProtocol {
     let route: Route
 
+    // Proxy
+    typealias Base = Route
+
+    nonisolated init?(_ route: Base) {
+        self.route = route
+    }
+
+    nonisolated func toBase() -> Base? {
+        route
+    }
+
+    // View
     var body: some View {
         route.destination
     }
@@ -37,14 +49,6 @@ extension RootView where Content == Route.Destination {
 
 @MainActor
 enum RootViewBuilder<Route: RouteDestinationProtocol> {
-    static func make<Content: View>(
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        RootView<Route, _> {
-            content()
-        }
-    }
-
     @ViewBuilder
     static func wrap(
         `if` condition: Bool,

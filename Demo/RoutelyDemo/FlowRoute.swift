@@ -47,9 +47,7 @@ private struct DestinationView: View {
                 if case .present = route.flowPresentationStyle {
                     dismiss()
                 }
-                Task {
-                    next()
-                }
+                next()
             } label: {
                 Text("Push Next")
                     .foregroundStyle(.black)

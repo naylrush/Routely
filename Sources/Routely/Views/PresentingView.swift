@@ -5,14 +5,17 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct PresentingView<Route: RouteDestinationProtocol, Content: View>: View {
-    @Bindable var router: Router<Route>
+struct PresentingView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
+    typealias RealRouter = EnhancedRouter<Route>
+    private typealias RealRoute = RealRouter.Route
+
+    @Bindable var router: RealRouter
     @ViewBuilder let content: Content
 
-    private var fullScreenRoute: Binding<RouteWithResult<Route>?> {
+    private var fullScreenRoute: Binding<RouteWithResult<RealRoute>?> {
         route($router.state.presentationState, withStyle: .fullScreen)
     }
-    private var sheetRoute: Binding<RouteWithResult<Route>?> {
+    private var sheetRoute: Binding<RouteWithResult<RealRoute>?> {
         route($router.state.presentationState, withStyle: .sheet())
     }
     private var sheetDismissalBehavior: Binding<SheetDismissalBehavior> {
@@ -32,11 +35,11 @@ struct PresentingView<Route: RouteDestinationProtocol, Content: View>: View {
     }
 
     private func DestinationWrapper<WrappedContent: View>(
-        routeWithResult: RouteWithResult<Route>,
-        @ViewBuilder wrapping: (Route.Destination) -> WrappedContent
+        routeWithResult: RouteWithResult<RealRoute>,
+        @ViewBuilder wrapping: (RealRoute.Destination) -> WrappedContent
     ) -> some View {
         DestinationConfigurationView(providedRoutelyResult: routeWithResult.result) {
-            RootViewBuilder<Route>.wrap(if: routeWithResult.route.wrapToRootView) {
+            RootViewBuilder<Route.Base>.wrap(if: routeWithResult.route.wrapToRootView) {
                 wrapping(routeWithResult.route.destination)
             }
         }
