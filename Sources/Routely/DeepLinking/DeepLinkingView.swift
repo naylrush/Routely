@@ -17,7 +17,7 @@ struct DeepLinkingView<Route: RouteProtocol, Content: View>: View {
     private let manager = DeepLinking.Manager.shared
     private let registry = DeepLinking.Registry.shared
 
-    let router: Router<Route>
+    let router: EnhancedRouter<Route>
     @ViewBuilder let content: Content
 
     var body: some View {

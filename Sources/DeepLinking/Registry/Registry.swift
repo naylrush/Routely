@@ -16,8 +16,8 @@ public final class Registry {
         entries.append(entry)
     }
 
-    public func handle<Router: RouterProtocol>(
-        router: Router,
+    public func handle(
+        router: any EnhancedRouterProtocol,
         rawDeepLink: RawDeepLink
     ) async throws -> Bool {
         for entry in entries where try await entry.parseAndHandle(
@@ -31,11 +31,12 @@ public final class Registry {
 }
 
 extension DeepLinkEntryProtocol {
-    fileprivate func parseAndHandle<Router: RouterProtocol>(
-        router: Router,
+    fileprivate func parseAndHandle(
+        router: any EnhancedRouterProtocol,
         rawDeepLink: RawDeepLink
     ) async throws -> Bool {
-        guard let deepLink = try await parseDeepLink(rawDeepLink: rawDeepLink) else { return false }
+        guard let router = router as? any EnhancedRouterProtocol<DeepLink.Route>,
+              let deepLink = try await parseDeepLink(rawDeepLink: rawDeepLink) else { return false }
         let handler = try await makeHandler()
         try await handler.handle(router: router, deepLink: deepLink)
         return true

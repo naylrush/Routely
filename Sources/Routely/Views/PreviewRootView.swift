@@ -29,7 +29,7 @@ public struct PreviewRootView<Route: RouteProtocol, Content: View>: View {
 
 @MainActor
 public enum PreviewRootViewBuilder<Route: RouteProtocol> {
-    static func make(content: () -> some View) -> some View {
+    public static func make(content: () -> some View) -> some View {
         PreviewRootView<Route, _>(content: content)
     }
 }

@@ -9,5 +9,8 @@ import RoutelyInterfaces
 public protocol Handler: Sendable {
     associatedtype DeepLink: DeepLinkProtocol
 
-    func handle<Router: RouterProtocol>(router: Router, deepLink: DeepLink) async throws
+    func handle<Router: EnhancedRouterProtocol>(
+        router: Router,
+        deepLink: DeepLink
+    ) async throws where Router.Wrapped == DeepLink.Route
 }
