@@ -40,12 +40,12 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "RoutingInterfaces",
-            targets: ["RoutingInterfaces"]
+            name: "RoutelyInterfaces",
+            targets: ["RoutelyInterfaces"]
         ),
         .library(
-            name: "Routing",
-            targets: ["Routing"]
+            name: "Routely",
+            targets: ["Routely"]
         ),
         .library(
             name: "DeepLinking",
@@ -56,16 +56,16 @@ let package = Package(
     targets: [
         .target(
             name: "DeepLinking",
-            dependencies: ["RoutingInterfaces", "Factory"],
+            dependencies: ["RoutelyInterfaces", "Factory"],
             plugins: [swiftLintPlugin]
         ),
         .target(
-            name: "Routing",
-            dependencies: ["DeepLinking", "RoutingInterfaces", "DeviceKit"],
+            name: "Routely",
+            dependencies: ["DeepLinking", "RoutelyInterfaces", "DeviceKit"],
             plugins: [swiftLintPlugin]
         ),
         .target(
-            name: "RoutingInterfaces",
+            name: "RoutelyInterfaces",
             dependencies: [],
             plugins: [swiftLintPlugin]
         ),

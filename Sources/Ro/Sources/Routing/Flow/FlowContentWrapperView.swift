@@ -3,7 +3,7 @@
 //
 
 import OSLog
-import RoutingInterfaces
+import RoutelyInterfaces
 import SwiftUI
 
 struct FlowContentWrapperView<FlowRoute: FlowRouteProtocol, Destination: View>: View {
@@ -54,4 +54,4 @@ struct FlowContentWrapperView<FlowRoute: FlowRouteProtocol, Destination: View>: 
     }
 }
 
-private let logger = Logger(subsystem: "Routing", category: "FlowContentWrapperView")
+private let logger = Logger(subsystem: "Routely", category: "FlowContentWrapperView")

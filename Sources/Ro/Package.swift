@@ -7,7 +7,7 @@ import PackageDescription
 
 let localDependenciesNames: [String] = [
     "ProfileInterfaces",
-    "RoutingInterfaces",
+    "RoutelyInterfaces",
     "DeepLinking",
     "SharedModels",
     "Toolbox",
@@ -38,20 +38,20 @@ let swiftLintPlugin: PackageDescription.Target.PluginUsage = .plugin(name: "Swif
 // MARK: - Package
 
 let package = Package(
-    name: "Routing",
+    name: "Routely",
     platforms: [
         .iOS(.v17)
     ],
     products: [
         .library(
-            name: "Routing",
-            targets: ["Routing"]
+            name: "Routely",
+            targets: ["Routely"]
         ),
     ],
     dependencies: packageDependencies,
     targets: [
         .target(
-            name: "Routing",
+            name: "Routely",
             dependencies: targetDependencies,
             plugins: [swiftLintPlugin]
         ),

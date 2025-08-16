@@ -4,7 +4,7 @@
 
 import Observation
 import OSLog
-import RoutingInterfaces
+import RoutelyInterfaces
 import SwiftUI
 import Toolbox
 
@@ -62,14 +62,14 @@ public final class Router: RouterProtocol {
         _ route: Route,
         completion: @escaping @MainActor (T?) -> Void
     ) {
-        let result = RoutingResult(completion: completion)
+        let result = RoutelyResult(completion: completion)
         present(style: style, route, result: result)
     }
 
     private func present(
         style: PresentationStyle,
         _ route: Route,
-        result: RoutingResult?
+        result: RoutelyResult?
     ) {
         stopPresenting()
 
@@ -143,4 +143,4 @@ extension Router {
     }
 }
 
-private let logger = Logger(subsystem: "Routing", category: "RouterImpl")
+private let logger = Logger(subsystem: "Routely", category: "RouterImpl")

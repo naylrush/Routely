@@ -3,9 +3,9 @@
 //
 
 import Foundation
-import RoutingInterfaces
+import RoutelyInterfaces
 
 struct RouteWithResult: Sendable {
     let route: Route
-    let result: RoutingResult?
+    let result: RoutelyResult?
 }

@@ -3,7 +3,7 @@
 //
 
 import Factory
-import RoutingInterfaces
+import RoutelyInterfaces
 import SwiftUI
 
 struct HierarchyConfigurationView<Content: View>: View {

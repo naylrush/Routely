@@ -2,10 +2,10 @@
 // Copyright © 2025 Движ
 //
 
-import RoutingInterfaces
+import RoutelyInterfaces
 import SwiftUI
 
-struct RoutingActionsConfigurationView<Content: View>: View {
+struct RoutelyActionsConfigurationView<Content: View>: View {
     @Environment(\.finishWholeRoute)
     private var finishWholeRoute
 
@@ -15,13 +15,13 @@ struct RoutingActionsConfigurationView<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        let dismiss = RoutingAction {
+        let dismiss = RoutelyAction {
             router.dismiss()
         }
 
         let finishWholeRoute = finishWholeRoute.isDummy ? dismiss : finishWholeRoute
 
-        let finishCurrentRoute = RoutingAction {
+        let finishCurrentRoute = RoutelyAction {
             router.externalRouterDismiss()
         }
 

@@ -2,7 +2,7 @@
 // Copyright © 2025 Движ
 //
 
-import RoutingInterfaces
+import RoutelyInterfaces
 import SwiftUI
 
 public struct PreviewRootView<Content: View>: View {

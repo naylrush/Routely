@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import RoutingInterfaces
+import RoutelyInterfaces
 
 @MainActor
 public protocol Handler: Sendable {

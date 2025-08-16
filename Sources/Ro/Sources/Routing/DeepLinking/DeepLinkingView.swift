@@ -5,7 +5,7 @@
 import DeepLinking
 import Factory
 import OSLog
-import RoutingInterfaces
+import RoutelyInterfaces
 import SharedComponents
 import SharedModels
 import SwiftUI
@@ -68,4 +68,4 @@ struct DeepLinkingView<Content: View>: View {
     }
 }
 
-private let logger = Logger(subsystem: "Routing", category: "DeepLinking")
+private let logger = Logger(subsystem: "Routely", category: "DeepLinking")

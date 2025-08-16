@@ -2,7 +2,7 @@
 // Copyright © 2025 Движ
 //
 
-import RoutingInterfaces
+import RoutelyInterfaces
 import SwiftUI
 import UIToolbox
 
@@ -83,7 +83,7 @@ private enum Appearance {
         FullScreenContainer {
             PreviewContentView()
         }
-        .environment(\.dvijDismiss, RoutingAction { isPresented = false })
+        .environment(\.dvijDismiss, RoutelyAction { isPresented = false })
     }
 }
 

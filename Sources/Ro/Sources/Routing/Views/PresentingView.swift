@@ -2,7 +2,7 @@
 // Copyright © 2025 Движ
 //
 
-import RoutingInterfaces
+import RoutelyInterfaces
 import SwiftUI
 import Toolbox
 
@@ -29,7 +29,7 @@ struct PresentingView<Content: View, Destination: View>: View {
     var body: some View {
         content
             .fullScreen(item: fullScreenRoute) { routeWithResult in
-                DestinationConfigurationView(providedRoutingResult: routeWithResult.result) {
+                DestinationConfigurationView(providedRoutelyResult: routeWithResult.result) {
                     RootView.wrap(
                         if: routeWithResult.route.wrapToRootView,
                         destination: destination
@@ -44,7 +44,7 @@ struct PresentingView<Content: View, Destination: View>: View {
                 item: sheetRoute,
                 behavior: sheetDismissalBehavior
             ) { routeWithResult in
-                DestinationConfigurationView(providedRoutingResult: routeWithResult.result) {
+                DestinationConfigurationView(providedRoutelyResult: routeWithResult.result) {
                     RootView.wrap(
                         if: routeWithResult.route.wrapToRootView,
                         destination: destination

@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import RoutingInterfaces
+import RoutelyInterfaces
 
 struct PresentationState: Sendable {
     let style: PresentationStyle

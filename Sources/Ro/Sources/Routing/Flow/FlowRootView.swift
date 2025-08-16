@@ -2,7 +2,7 @@
 // Copyright © 2025 Движ
 //
 
-import RoutingInterfaces
+import RoutelyInterfaces
 import SwiftUI
 
 public struct FlowRootView<FlowRoute: FlowRouteProtocol, Destination: View>: View {

@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import RoutingInterfaces
+import RoutelyInterfaces
 
 public protocol DeepLinkEntryProtocol: Actor {
     associatedtype DeepLink: DeepLinkProtocol

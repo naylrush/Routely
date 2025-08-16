@@ -4,7 +4,7 @@
 
 import Foundation
 import OSLog
-import RoutingInterfaces
+import RoutelyInterfaces
 
 @MainActor
 public final class Registry {

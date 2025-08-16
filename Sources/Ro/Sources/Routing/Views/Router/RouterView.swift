@@ -21,7 +21,7 @@ struct RouterView<Content: View>: View {
                 router: router,
                 externalRouter: externalRouter
             ) {
-                RoutingActionsConfigurationView {
+                RoutelyActionsConfigurationView {
                     content
                 }
             }
