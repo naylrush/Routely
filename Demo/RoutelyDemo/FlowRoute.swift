@@ -9,7 +9,7 @@ public enum FlowRoute: FlowRouteProtocol {
     case fifth
 }
 
-extension FlowRoute: ProxyRouteDestinationProtocol {
+extension FlowRoute: FlowRouteDestinationProtocol {
     public var body: some View {
         switch self {
         case .first: DestinationView(route: .first)
@@ -17,15 +17,6 @@ extension FlowRoute: ProxyRouteDestinationProtocol {
         case .third: DestinationView(route: .third)
         case .fourth: DestinationView(route: .fourth)
         case .fifth: DestinationView(route: .fifth)
-        }
-    }
-}
-
-extension FlowRoute: FlowRouteDestinationProtocol {
-    public var flowPresentationStyle: FlowPresentationStyle {
-        switch self {
-        case .first, .second, .fourth, .fifth: .push
-        case .third: .present(.sheet())
         }
     }
 }
@@ -44,9 +35,6 @@ private struct DestinationView: View {
             Text(String(describing: route))
 
             Button {
-                if case .present = route.flowPresentationStyle {
-                    dismiss()
-                }
                 next()
             } label: {
                 Text("Push Next")

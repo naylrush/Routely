@@ -38,16 +38,10 @@ struct FlowContentWrapperView<FlowRoute: FlowRouteDestinationProtocol>: View {
             return
         }
 
-        switch nextFlowRoute.flowPresentationStyle {
-        case .push:
-            router.push(nextRoute)
-
-        case let .present(style):
-            router.present(style: style, nextRoute)
-        }
+        router.push(nextRoute)
 
         logger.debug(
-            "\(String(describing: nextFlowRoute.flowPresentationStyle)) next route: \(String(describing: nextRoute))"
+            "Pushed next flow's route: \(String(describing: nextRoute))"
         )
     }
 }
