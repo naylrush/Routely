@@ -36,7 +36,7 @@ struct PresentingView<Route: ProxyRouteDestinationProtocol, Content: View>: View
         @ViewBuilder wrapping: (Route.Destination) -> WrappedContent
     ) -> some View {
         DestinationConfigurationView(providedRoutelyResult: routeWithResult.result) {
-            ProxyRootViewBuilder<Route>.wrap(if: routeWithResult.route.wrapToRootView) {
+            RootViewBuilder<Route>.wrap(if: routeWithResult.route.wrapToRootView) {
                 wrapping(routeWithResult.route.destination)
             }
         }

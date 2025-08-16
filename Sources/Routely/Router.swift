@@ -8,8 +8,9 @@ import RoutelyInterfaces
 import SwiftUI
 
 @Observable
-public class Router<Route: RouteProtocol>: RouterProtocol {
-    let id = UUID()
+public class Router<Route: RouteProtocol>: RouterProtocol, Identifiable {
+    public nonisolated var id: UUID { _id }
+    private nonisolated let _id = UUID()
 
     var state = RouterState<Route>()
 

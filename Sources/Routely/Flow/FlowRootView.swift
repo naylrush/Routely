@@ -13,7 +13,7 @@ public struct FlowRootView<FlowRoute: FlowRouteDestinationProtocol>: View {
     }
 
     public var body: some View {
-        ProxyRootView(route: ProxyFlowRoute(initialRoute))
+        RootView(route: ProxyFlowRoute(initialRoute))
     }
 }
 
