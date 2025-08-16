@@ -4,76 +4,85 @@
 
 import RoutelyInterfaces
 
-extension RouterState where Route: ProxyRouteProtocol {
-    convenience init(_ base: RouterState<Route.Base>) {
-        self.init(
-            path: base.path.compactMap(IdentifiableModel<Route>.init),
-            presentationState: base.presentationState.flatMap(PresentationState.init),
-        )
+extension RouterState {
+    public convenience init<ProxyRoute: ProxyRouteProtocol, BaseRoute: RouteProtocol>(
+        _ state: RouterState<EnhancedRoute<BaseRoute>>
+    ) where Route == EnhancedRoute<ProxyRoute>, ProxyRoute.Base == BaseRoute {
+        let mappedPath = state.path.compactMap(IdentifiableModel<Route>.init)
+        let mappedPresentationState = state.presentationState.flatMap(PresentationState<Route>.init)
+        self.init(path: mappedPath, presentationState: mappedPresentationState)
     }
 
-    func toBase() -> RouterState<Route.Base> {
+    public func into<ProxyRoute: ProxyRouteProtocol, BaseRoute: RouteProtocol>()
+    -> RouterState<EnhancedRoute<BaseRoute>>
+    where Route == EnhancedRoute<ProxyRoute>, ProxyRoute.Base == BaseRoute {
         .init(
-            path: path.compactMap { $0.toBase() },
-            presentationState: presentationState?.toBase()
+            path: path.compactMap { $0.into() },
+            presentationState: presentationState?.into()
         )
     }
 }
 
-extension RouteWithResult: Proxy where Route: ProxyRouteProtocol {
-    typealias Base = RouteWithResult<Route.Base>
-
-    init?(_ base: RouteWithResult<Route.Base>) {
-        if let route = Route(base.route) {
-            self.init(route: route, result: base.result)
-        } else {
-            return nil
-        }
+extension PresentationState {
+    public init?<ProxyRoute: ProxyRouteProtocol, BaseRoute: RouteProtocol>(
+        _ state: PresentationState<EnhancedRoute<BaseRoute>>
+    ) where Route == EnhancedRoute<ProxyRoute>, ProxyRoute.Base == BaseRoute {
+        guard let mapped = RouteWithResult<Route>(state.routeWithResult) else { return nil }
+        self.init(style: state.style, routeWithResult: mapped)
     }
 
-    func toBase() -> RouteWithResult<Route.Base>? {
-        if let baseRoute = route.toBase() {
-            .init(route: baseRoute, result: result)
-        } else {
-            nil
-        }
+    public func into<ProxyRoute: ProxyRouteProtocol, BaseRoute: RouteProtocol>()
+    -> PresentationState<EnhancedRoute<BaseRoute>>?
+    where Route == EnhancedRoute<ProxyRoute>, ProxyRoute.Base == BaseRoute {
+        guard let mapped: RouteWithResult<EnhancedRoute<BaseRoute>> = routeWithResult.into() else { return nil }
+        return .init(style: style, routeWithResult: mapped)
     }
 }
 
-extension PresentationState: Proxy where Route: ProxyRouteProtocol {
-    typealias Base = PresentationState<Route.Base>
-
-    init?(_ base: PresentationState<Route.Base>) {
-        if let routeWithResult = RouteWithResult<Route>(base.routeWithResult) {
-            self.init(style: base.style, routeWithResult: routeWithResult)
-        } else {
-            return nil
-        }
+extension RouteWithResult {
+    public init?<ProxyRoute: ProxyRouteProtocol, BaseRoute: RouteProtocol>(
+        _ value: RouteWithResult<EnhancedRoute<BaseRoute>>
+    ) where Route == EnhancedRoute<ProxyRoute>, ProxyRoute.Base == BaseRoute {
+        guard let mapped = Route(value.route) else { return nil }
+        self.init(route: mapped, result: value.result)
     }
 
-    func toBase() -> PresentationState<Route.Base>? {
-        if let baseRouteWithResult = routeWithResult.toBase() {
-            .init(style: style, routeWithResult: baseRouteWithResult)
-        } else {
-            nil
-        }
+    public func into<ProxyRoute: ProxyRouteProtocol, BaseRoute: RouteProtocol>()
+    -> RouteWithResult<EnhancedRoute<BaseRoute>>?
+    where Route == EnhancedRoute<ProxyRoute>, ProxyRoute.Base == BaseRoute {
+        guard let mapped: EnhancedRoute<BaseRoute> = route.into() else { return nil }
+        return .init(route: mapped, result: result)
     }
 }
 
-extension IdentifiableModel: Proxy where T: ProxyRouteProtocol {
-    public typealias Base = IdentifiableModel<T.Base>
+extension IdentifiableModel {
+    public init?<ProxyRoute: ProxyRouteProtocol, BaseRoute: RouteProtocol>(
+        _ model: IdentifiableModel<EnhancedRoute<BaseRoute>>
+    ) where T == EnhancedRoute<ProxyRoute>, ProxyRoute.Base == BaseRoute {
+        guard let mapped = T(model.value) else { return nil }
+        self.init(id: model.id, value: mapped)
+    }
 
-    public init?(_ base: IdentifiableModel<T.Base>) {
-        if let value = T(base.value) {
-            self.init(id: base.id, value: value)
+    public func into<ProxyRoute: ProxyRouteProtocol, BaseRoute: RouteProtocol>()
+    -> IdentifiableModel<EnhancedRoute<BaseRoute>>?
+    where T == EnhancedRoute<ProxyRoute>, ProxyRoute.Base == BaseRoute {
+        guard let mapped: EnhancedRoute<BaseRoute> = value.into() else { return nil }
+        return .init(id: id, value: mapped)
+    }
+}
+
+extension EnhancedRoute where Base: ProxyRouteProtocol {
+    public init?<NestedBase: RouteProtocol>(_ route: EnhancedRoute<NestedBase>) where Base.Base == NestedBase {
+        if case let .wrapped(nestedBase) = route, let base = Base(nestedBase) {
+            self = .wrapped(base)
         } else {
             return nil
         }
     }
 
-    public func toBase() -> IdentifiableModel<T.Base>? {
-        if let baseValue = value.toBase() {
-            .init(id: id, value: baseValue)
+    public func into<NestedBase: RouteProtocol>() -> EnhancedRoute<NestedBase>? where Base.Base == NestedBase {
+        if case let .wrapped(base) = self, let nestedBase = base.toBase() {
+            .wrapped(nestedBase)
         } else {
             nil
         }

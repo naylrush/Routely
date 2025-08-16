@@ -7,8 +7,10 @@ import OSLog
 import RoutelyInterfaces
 import SwiftUI
 
+typealias EnhancedRouterState<Route: RouteProtocol> = RouterState<EnhancedRoute<Route>>
+
 @Observable
-class RouterState<Route: RouteProtocol>: Identifiable {
+class RouterState<Route: RouteProtocol> {
     var path: [IdentifiableModel<Route>]
     var presentationState: PresentationState<Route>? {
         willSet { _willSetPresentationState(presentationState) }

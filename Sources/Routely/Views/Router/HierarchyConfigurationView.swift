@@ -8,8 +8,8 @@ import SwiftUI
 struct HierarchyConfigurationView<Route: RouteProtocol, Content: View>: View {
     private let manager = Manager.shared
 
-    let router: Router<Route>
     let externalRouter: Router<Route>?
+    let router: Router<Route>
 
     @ViewBuilder let content: Content
 

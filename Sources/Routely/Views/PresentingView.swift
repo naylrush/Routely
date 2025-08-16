@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct PresentingView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
+struct PresentingView<Route: RouteDestinationProtocol, Content: View>: View {
     @Bindable var router: Router<Route>
     @ViewBuilder let content: Content
 
@@ -40,6 +40,19 @@ struct PresentingView<Route: ProxyRouteDestinationProtocol, Content: View>: View
                 wrapping(routeWithResult.route.destination)
             }
         }
+    }
+}
+
+private struct DestinationConfigurationView<Destination: View>: View {
+    @Environment(\.routingResult)
+    private var routingResult
+
+    let providedRoutelyResult: RoutelyResult?
+    @ViewBuilder let destination: Destination
+
+    var body: some View {
+        destination
+            .environment(\.routingResult, providedRoutelyResult ?? routingResult)
     }
 }
 

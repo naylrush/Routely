@@ -1,0 +1,20 @@
+//
+// Copyright © 2025 Движ
+//
+
+import Foundation
+import Observation
+import RoutelyInterfaces
+
+final class ProxyEnhancedRouter<Route: ProxyRouteDestinationProtocol>: EnhancedRouter<Route> {
+    let wrapped = EnhancedRouter<Route.Base>()
+
+    override var id: UUID {
+        wrapped.id
+    }
+
+    override var state: EnhancedRouterState<Route> {
+        get { .init(wrapped.state) }
+        set { wrapped.state = newValue.into() }
+    }
+}

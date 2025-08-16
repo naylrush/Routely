@@ -4,11 +4,13 @@
 
 import Foundation
 
-public enum EnhancedRoute<Base: RouteProtocol>: ProxyRouteProtocol {
+public enum EnhancedRoute<Base: RouteProtocol>: RouteProtocol {
     case wrapped(Base)
 
     case safari(URL)
+}
 
+extension EnhancedRoute: ProxyRouteProtocol {
     public init?(_ base: Base) {
         self = .wrapped(base)
     }

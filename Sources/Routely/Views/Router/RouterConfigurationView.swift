@@ -5,28 +5,27 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct RouterConfigurationView<Route: RouteProtocol, Content: View>: View {
-    private let router: Router<Route>
-    private let externalRouter: Router<Route>?
+struct RouterConfigurationView<Route: RouteDestinationProtocol, Content: View>: View {
+    @Environment(EnhancedRouter<Route>.self)
+    private var externalRouter: EnhancedRouter?
 
-    private let content: Content
+    let router: EnhancedRouter<Route>
 
-    init(
-        router: Router<Route>,
-        externalRouter: Router<Route>?,
-        @ViewBuilder content: () -> Content
-    ) {
-        self.router = router
-        self.externalRouter = externalRouter
-
-        router.onExternalRouterDismiss = { [weak externalRouter] in
-            precondition(router !== externalRouter, "router and externalRouter should be different")
-            externalRouter?.dismiss()
-        }
-        self.content = content()
-    }
+    @ViewBuilder let content: Content
 
     var body: some View {
-        content
+        ExternalRouterConfigurationView(
+            externalRouter: externalRouter,
+            router: router
+        ) {
+            HierarchyConfigurationView(
+                externalRouter: externalRouter,
+                router: router
+            ) {
+                RoutelyActionsConfigurationView(router: router) {
+                    content
+                }
+            }
+        }
     }
 }

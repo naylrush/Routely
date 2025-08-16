@@ -6,13 +6,12 @@ import RoutelyInterfaces
 import SwiftUI
 
 struct OpenURLOverridingView<Route: RouteProtocol, Content: View>: View {
-    let router: Router<Route>
+    let router: EnhancedRouter<Route>
     @ViewBuilder let content: Content
 
     private var openUrlAction: OpenURLAction {
         OpenURLAction { url in
-            // FIXME
-//            router.present(style: .sheet(), .safari(url))
+            router.present(style: .sheet(), .safari(url))
             return .handled
         }
     }
