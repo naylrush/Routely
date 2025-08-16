@@ -8,6 +8,8 @@ import RoutelyInterfaces
 
 @MainActor
 public final class Registry {
+    public static let shared = Registry()
+
     private var entries: [any DeepLinkEntryProtocol] = []
 
     public func register<E: DeepLinkEntryProtocol>(_ entry: E) {

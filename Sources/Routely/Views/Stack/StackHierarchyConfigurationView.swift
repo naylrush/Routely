@@ -2,14 +2,10 @@
 // Copyright © 2025 Движ
 //
 
-import Factory
 import RoutelyInterfaces
 import SwiftUI
 
 struct StackHierarchyConfigurationView<Route: RouteProtocol, Content: View>: View {
-    @Injected(\.routingManager)
-    private var routingManager
-
     let router: Router<Route>
 
     // nil for root view of stack

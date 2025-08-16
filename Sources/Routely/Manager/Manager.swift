@@ -4,7 +4,10 @@
 
 import SwiftUI
 
+@MainActor
 @Observable
-final class RoutelyManager {
+final class Manager {
+    static let shared = Manager()
+
     var topRouterId: UUID?
 }

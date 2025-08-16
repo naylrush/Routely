@@ -3,35 +3,7 @@
 
 import PackageDescription
 
-// MARK: - Dependencies
-
-let localDependenciesNames: [String] = [
-]
-
-let localPackageDependencies: [PackageDescription.Package.Dependency] = localDependenciesNames.map { .package(path: "../\($0)") }
-
-let localTargetDependencies: [PackageDescription.Target.Dependency] = localDependenciesNames.map { .init(stringLiteral: $0) } + [
-    // Dependencies that cannot be evaluated from name
-]
-
-let thirdPartyPackageDependencies: [PackageDescription.Package.Dependency] = [
-    .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.57.0"),
-    .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.5.0"),
-    .package(url: "https://github.com/hmlongco/Factory.git", from: "2.4.3"),
-]
-
-let thirdPartyTargetDependencies: [PackageDescription.Target.Dependency] = [
-    "DeviceKit",
-    .product(name: "Factory", package: "Factory"),
-]
-
-let packageDependencies = localPackageDependencies + thirdPartyPackageDependencies
-
-let targetDependencies = localTargetDependencies + thirdPartyTargetDependencies
-
 let swiftLintPlugin: PackageDescription.Target.PluginUsage = .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
-
-// MARK: - Package
 
 let package = Package(
     name: "Routely",
@@ -44,29 +16,32 @@ let package = Package(
             targets: ["RoutelyInterfaces"]
         ),
         .library(
-            name: "Routely",
-            targets: ["Routely"]
-        ),
-        .library(
             name: "DeepLinking",
             targets: ["DeepLinking"]
         ),
+        .library(
+            name: "Routely",
+            targets: ["Routely"]
+        ),
     ],
-    dependencies: packageDependencies,
+    dependencies: [
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.59.1"),
+        .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.6.0"),
+    ],
     targets: [
         .target(
+            name: "RoutelyInterfaces",
+            dependencies: [],
+            plugins: [swiftLintPlugin]
+        ),
+        .target(
             name: "DeepLinking",
-            dependencies: ["RoutelyInterfaces", "Factory"],
+            dependencies: ["RoutelyInterfaces"],
             plugins: [swiftLintPlugin]
         ),
         .target(
             name: "Routely",
-            dependencies: ["DeepLinking", "RoutelyInterfaces", "DeviceKit"],
-            plugins: [swiftLintPlugin]
-        ),
-        .target(
-            name: "RoutelyInterfaces",
-            dependencies: [],
+            dependencies: ["RoutelyInterfaces", "DeepLinking", "DeviceKit"],
             plugins: [swiftLintPlugin]
         ),
     ]

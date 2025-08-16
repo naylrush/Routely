@@ -5,6 +5,8 @@
 import SwiftUI
 
 @MainActor
-public final class DeepLinkingManager {
+public final class Manager {
+    public static let shared = Manager()
+
     public var pendingRawDeepLink: RawDeepLink?
 }

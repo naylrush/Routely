@@ -3,7 +3,6 @@
 //
 
 import DeepLinking
-import Factory
 import OSLog
 import RoutelyInterfaces
 import SwiftUI
@@ -15,11 +14,8 @@ struct DeepLinkingView<Route: RouteProtocol, Content: View>: View {
     @Environment(\.isDeepLinkHandlingEnabled)
     private var isDeepLinkHandlingEnabled
 
-    @Injected(\.deepLinkingManager)
-    private var deepLinkingManager
-
-    @Injected(\.deepLinkRegistry)
-    private var deepLinkRegistry
+    private let manager = DeepLinking.Manager.shared
+    private let registry = DeepLinking.Registry.shared
 
     let router: Router<Route>
     @ViewBuilder let content: Content
@@ -38,23 +34,23 @@ struct DeepLinkingView<Route: RouteProtocol, Content: View>: View {
     private func handleDeepLinkIfPending() async {
         guard
             isTopHierarchy,
-            let rawDeepLink = deepLinkingManager.pendingRawDeepLink
+            let rawDeepLink = manager.pendingRawDeepLink
         else { return }
 
         logger.debug("Handling pending deep link: \(rawDeepLink)")
-        deepLinkingManager.pendingRawDeepLink = nil
+        manager.pendingRawDeepLink = nil
         await handleDeepLink(rawDeepLink: rawDeepLink)
     }
 
     private func handleDeepLink(rawDeepLink: RawDeepLink) async {
         guard isDeepLinkHandlingEnabled else {
-            deepLinkingManager.pendingRawDeepLink = rawDeepLink
+            manager.pendingRawDeepLink = rawDeepLink
             logger.debug("Saved pending deep link: \(rawDeepLink)")
             return
         }
 
         do {
-            let handled = try await deepLinkRegistry.handle(router: router, rawDeepLink: rawDeepLink)
+            let handled = try await registry.handle(router: router, rawDeepLink: rawDeepLink)
             if !handled {
                 logger.warning("Could not handle deep link: \(rawDeepLink)")
             }

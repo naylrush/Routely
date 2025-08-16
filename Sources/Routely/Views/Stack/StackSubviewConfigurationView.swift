@@ -2,7 +2,6 @@
 // Copyright © 2025 Движ
 //
 
-import Factory
 import SwiftUI
 
 struct StackSubviewConfigurationView<Content: View>: View {
