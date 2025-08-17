@@ -5,20 +5,17 @@
 import Foundation
 import SwiftUI
 
-public protocol RouteProtocol: Hashable, Sendable {
-    var wrapToRootView: Bool { get }
-}
-
-extension RouteProtocol {
-    public var wrapToRootView: Bool { true }
-}
+public protocol RouteProtocol: Hashable, Sendable {}
 
 public protocol RouteDestinationProtocol: RouteProtocol, View {
     typealias Destination = Body
+
+    var wrapToRootView: Bool { get }
 }
 
 extension RouteDestinationProtocol {
     public var destination: Destination { body }
+    public var wrapToRootView: Bool { true }
 }
 
 public protocol ProxyRouteProtocol: RouteProtocol, Proxy where Base: RouteProtocol {}

@@ -23,6 +23,10 @@ private struct DummyProxyRoute<Route: RouteDestinationProtocol>: ProxyRouteDesti
     var body: some View {
         route.destination
     }
+
+    var wrapToRootView: Bool {
+        route.wrapToRootView
+    }
 }
 
 public struct RootView<Route: RouteDestinationProtocol, Content: View>: View {

@@ -16,4 +16,11 @@ where Base: RouteDestinationProtocol {
         case let .wrapped(wrapped): wrapped.body
         }
     }
+
+    public var wrapToRootView: Bool {
+        switch self {
+        case let .wrapped(route): route.wrapToRootView
+        case .safari: true
+        }
+    }
 }

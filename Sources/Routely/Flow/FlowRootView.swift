@@ -22,7 +22,7 @@ public struct FlowRootView<FlowRoute: FlowRouteDestinationProtocol>: View {
     FlowRootView(initialRoute: PreviewRoute.first)
 }
 
-public enum PreviewRoute: FlowRouteProtocol {
+public enum PreviewRoute: FlowRouteProtocol, SelfProxy {
     case first
     case second
     case third

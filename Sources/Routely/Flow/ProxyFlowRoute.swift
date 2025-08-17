@@ -36,4 +36,8 @@ struct ProxyFlowRoute<FlowRoute: FlowRouteDestinationProtocol>: FlowRouteDestina
     var body: some View {
         FlowContentWrapperView(route: route)
     }
+
+    var wrapToRootView: Bool {
+        route.wrapToRootView
+    }
 }
