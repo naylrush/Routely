@@ -10,6 +10,12 @@ struct FlowContentWrapperView<FlowRoute: FlowRouteDestinationProtocol>: View {
     @Environment(EnhancedRouter<FlowRoute.Base>.self)
     private var router
 
+    @Environment(\.routingResult)
+    private var routingResult
+
+    @Environment(\.finishCurrentRoute)
+    private var finishCurrentRoute
+
     let route: FlowRoute
 
     var body: some View {
@@ -33,15 +39,32 @@ struct FlowContentWrapperView<FlowRoute: FlowRouteDestinationProtocol>: View {
         }
 
         let nextFlowRoute = FlowRoute.allCases[nextIndex]
+        goTo(nextFlowRoute)
+    }
+
+    private func goTo(_ nextFlowRoute: FlowRoute?) {
+        guard let nextFlowRoute else { return }
         guard let nextRoute = nextFlowRoute.toBase() else {
             logger.fault("Base convertion failed")
             return
         }
 
-        router.push(nextRoute)
+        if case .present = route.flowPresentationStyle {
+            routingResult.value = nextFlowRoute
+            finishCurrentRoute()
+            return
+        }
+
+        switch nextFlowRoute.flowPresentationStyle {
+        case .push:
+            router.push(nextRoute)
+
+        case let .present(style):
+            router.present(style: style, nextRoute, completion: goTo)
+        }
 
         logger.debug(
-            "Pushed next flow's route: \(String(describing: nextRoute))"
+            "\(nextFlowRoute.flowPresentationStyle) next route: \(String(describing: nextRoute))"
         )
     }
 }

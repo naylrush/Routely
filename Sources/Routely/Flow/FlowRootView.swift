@@ -31,6 +31,15 @@ public enum PreviewRoute: FlowRouteProtocol, SelfProxy {
 }
 
 extension PreviewRoute: FlowRouteDestinationProtocol {
+    public var flowPresentationStyle: FlowPresentationStyle {
+        switch self {
+        case .first, .second, .fourth, .fifth: .push
+        case .third: .present(.sheet())
+        }
+    }
+}
+
+extension PreviewRoute: RouteDestinationProtocol {
     public var body: some View {
         switch self {
         case .first: ContentView(route: .first)
