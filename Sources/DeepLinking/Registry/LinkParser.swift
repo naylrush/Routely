@@ -4,6 +4,7 @@
 
 import Foundation
 
+@MainActor
 enum LinkParser {
     static func parseDeepLink(url: URL) -> RawDeepLink? {
         if let appDeepLink = parseAppDeepLink(url: url) {
@@ -18,7 +19,7 @@ enum LinkParser {
     }
 
     static func parseAppDeepLink(url: URL) -> RawDeepLink? {
-        guard url.scheme == AppScheme.dvij else {
+        guard url.scheme == Configuration.shared.appScheme else {
             return nil
         }
         let path = url.sanitizingPath()
@@ -32,7 +33,7 @@ enum LinkParser {
     }
 
     static func parseUniversalLink(url: URL) -> RawDeepLink? {
-        guard url.isHttpScheme, url.host() == URLHost.dvij else {
+        guard url.isHttpScheme, url.host() == Configuration.shared.urlHost else {
             return nil
         }
         let path = url.sanitizingPath()

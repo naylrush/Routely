@@ -2,6 +2,7 @@
 // Copyright © 2025 Движ
 //
 
+import DeepLinking
 import RoutelyInterfaces
 import SwiftUI
 
@@ -13,7 +14,11 @@ struct ProxyRootView<Route: ProxyRouteDestinationProtocol, Content: View>: View 
             OpenURLOverridingView(router: router) {
                 PresentingView(router: router) {
                     StackView(router: router) {
-                        DeepLinkingView(router: router) {
+                        if DeepLinking.Configuration.isEnabled {
+                            DeepLinkingView(router: router) {
+                                content
+                            }
+                        } else {
                             content
                         }
                     }

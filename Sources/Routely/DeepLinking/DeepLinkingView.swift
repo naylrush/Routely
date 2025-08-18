@@ -7,7 +7,7 @@ import OSLog
 import RoutelyInterfaces
 import SwiftUI
 
-struct DeepLinkingView<Route: RouteProtocol, Content: View>: View {
+struct DeepLinkingView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
     @Environment(\.isTopHierarchy)
     private var isTopHierarchy
 
@@ -17,7 +17,7 @@ struct DeepLinkingView<Route: RouteProtocol, Content: View>: View {
     private let manager = DeepLinking.Manager.shared
     private let registry = DeepLinking.Registry.shared
 
-    let router: EnhancedRouter<Route>
+    let router: ProxyEnhancedRouter<Route>
     @ViewBuilder let content: Content
 
     var body: some View {
@@ -50,7 +50,7 @@ struct DeepLinkingView<Route: RouteProtocol, Content: View>: View {
         }
 
         do {
-            let handled = try await registry.handle(router: router, rawDeepLink: rawDeepLink)
+            let handled = try await registry.handle(router: router.wrapped, rawDeepLink: rawDeepLink)
             if !handled {
                 logger.warning("Could not handle deep link: \(rawDeepLink)")
             }

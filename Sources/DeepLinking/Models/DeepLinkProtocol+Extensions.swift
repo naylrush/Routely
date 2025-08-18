@@ -5,18 +5,13 @@
 import Foundation
 
 extension DeepLinkProtocol {
-    public var asDeepLink: URL? {
-        let path = "\(Constants.baseDeepLink)/\(path)"
+    @MainActor public var asDeepLink: URL? {
+        let path = "\(Configuration.shared.appScheme)://\(path)"
         return URL(string: path)
     }
 
-    public var asUniversalLink: URL? {
-        let path = "\(Constants.baseUrl)/\(path)"
+    @MainActor public var asUniversalLink: URL? {
+        let path = "\(Configuration.shared.httpScheme)://\(Configuration.shared.urlHost)/\(path)"
         return URL(string: path)
     }
-}
-
-private enum Constants {
-    static let baseDeepLink = "dvij://"
-    static let baseUrl = "https://\(URLHost.dvij)"
 }

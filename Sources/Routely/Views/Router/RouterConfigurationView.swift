@@ -11,7 +11,7 @@ struct RouterConfigurationView<Route: ProxyRouteDestinationProtocol, Content: Vi
 
     @State private var proxyRouter = ProxyEnhancedRouter<Route>()
 
-    @ViewBuilder let content: (EnhancedRouter<Route>) -> Content
+    @ViewBuilder let content: (ProxyEnhancedRouter<Route>) -> Content
 
     var body: some View {
         let router = proxyRouter.wrapped
