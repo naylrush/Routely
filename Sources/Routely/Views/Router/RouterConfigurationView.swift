@@ -9,12 +9,12 @@ struct RouterConfigurationView<Route: ConvertibleRoutableDestination, Content: V
     @Environment(CompositeRouter<Route.Target>.self)
     private var externalRouter: CompositeRouter?
 
-    @State private var proxyRouter = CompositeConvertibleRouter<Route>()
+    @State private var compositeRouter = CompositeConvertibleRouter<Route>()
 
     @ViewBuilder let content: (CompositeConvertibleRouter<Route>) -> Content
 
     var body: some View {
-        let router = proxyRouter.wrapped
+        let router = compositeRouter.wrapped
 
         ExternalRouterConfigurationView(
             externalRouter: externalRouter,
@@ -25,7 +25,7 @@ struct RouterConfigurationView<Route: ConvertibleRoutableDestination, Content: V
                 router: router
             ) {
                 RoutelyActionsConfigurationView(router: router) {
-                    content(proxyRouter)
+                    content(compositeRouter)
                 }
             }
         }

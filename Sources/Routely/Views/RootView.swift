@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-private struct DummyProxyRoute<Route: RoutableDestination>: ConvertibleRoutableDestination {
+private struct DummyConvertibleRoute<Route: RoutableDestination>: ConvertibleRoutableDestination {
     let route: Route
 
     // Convertible
@@ -37,7 +37,7 @@ public struct RootView<Route: RoutableDestination, Content: View>: View {
     }
 
     public var body: some View {
-        ProxyRootView<DummyProxyRoute<Route>, _> {
+        RootContentView<DummyConvertibleRoute<Route>, _> {
             content
         }
     }

@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct ProxyFlowRoute<FlowRoute: FlowRoutableDestination>: FlowRoutableDestination {
+struct FlowConvertibleRoute<FlowRoute: FlowRoutableDestination>: FlowRoutableDestination {
     let route: FlowRoute
 
     nonisolated init(_ route: FlowRoute) {
@@ -13,7 +13,7 @@ struct ProxyFlowRoute<FlowRoute: FlowRoutableDestination>: FlowRoutableDestinati
     }
 
     // CaseIterable
-    nonisolated static var allCases: [ProxyFlowRoute<FlowRoute>] {
+    nonisolated static var allCases: [FlowConvertibleRoute<FlowRoute>] {
         FlowRoute.allCases.map { Self.init($0) }
     }
 

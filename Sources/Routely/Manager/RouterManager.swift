@@ -6,8 +6,8 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class Manager {
-    static let shared = Manager()
+final class RouterManager {
+    static let shared = RouterManager()
 
     var topRouterId: UUID?
 }

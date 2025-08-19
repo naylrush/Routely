@@ -13,9 +13,9 @@ extension RouterState {
         self.init(path: path, presentationState: presentationState)
     }
 
-    public func into<ProxyRoute: ConvertibleRoutable, TargetRoute: Routable>()
+    public func into<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>()
     -> RouterState<CompositeRoute<TargetRoute>>
-    where Route == CompositeRoute<ProxyRoute>, ProxyRoute.Target == TargetRoute {
+    where Route == CompositeRoute<WrappedRoute>, WrappedRoute.Target == TargetRoute {
         .init(
             path: path.compactMap { $0.into() },
             presentationState: presentationState?.into()

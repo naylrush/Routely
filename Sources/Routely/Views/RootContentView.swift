@@ -6,19 +6,15 @@ import DeepLinking
 import RoutelyInterfaces
 import SwiftUI
 
-struct ProxyRootView<Route: ConvertibleRoutableDestination, Content: View>: View {
+struct RootContentView<ConvertibleRoute: ConvertibleRoutableDestination, Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        RouterConfigurationView<Route, _> { router in
+        RouterConfigurationView<ConvertibleRoute, _> { router in
             OpenURLOverridingView(router: router) {
                 PresentingView(router: router) {
                     StackView(router: router) {
-                        if DeepLinking.Configuration.isEnabled {
-                            DeepLinkingView(router: router) {
-                                content
-                            }
-                        } else {
+                        DeepLinkingWrapperView(router: router) {
                             content
                         }
                     }
@@ -28,8 +24,8 @@ struct ProxyRootView<Route: ConvertibleRoutableDestination, Content: View>: View
     }
 }
 
-extension ProxyRootView where Content == Route.Destination {
-    init(initialRoute: Route) {
+extension RootContentView where Content == ConvertibleRoute.Destination {
+    init(initialRoute: ConvertibleRoute) {
         self.init {
             initialRoute.destination
         }

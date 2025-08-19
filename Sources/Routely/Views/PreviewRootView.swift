@@ -21,7 +21,7 @@ public struct PreviewRootView<Route: Routable, Content: View>: View {
     }
 
     public var body: some View {
-        ProxyRootView<PreviewConvertibleRoute<Route>, _> {
+        RootContentView<PreviewConvertibleRoute<Route>, _> {
             content
         }
     }
