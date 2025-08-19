@@ -5,7 +5,7 @@
 import SwiftUI
 
 extension Binding where Value: Sendable {
-    public func isNil<T>() -> Binding<Bool> where T? == Value {
+    func isNil<T>() -> Binding<Bool> where T? == Value {
         Binding<Bool>(
             get: { wrappedValue == nil },
             set: { setNil in
@@ -16,7 +16,7 @@ extension Binding where Value: Sendable {
         )
     }
 
-    public func isNotNil<T>() -> Binding<Bool> where T? == Value {
+    func isNotNil<T>() -> Binding<Bool> where T? == Value {
         not(isNil())
     }
 }
