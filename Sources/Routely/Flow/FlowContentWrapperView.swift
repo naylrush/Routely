@@ -7,7 +7,7 @@ import RoutelyInterfaces
 import SwiftUI
 
 struct FlowContentWrapperView<FlowRoute: FlowRouteDestinationProtocol>: View {
-    @Environment(EnhancedRouter<FlowRoute.Base>.self)
+    @Environment(EnhancedRouter<FlowRoute.Target>.self)
     private var router
 
     @Environment(\.routingResult)
@@ -44,8 +44,8 @@ struct FlowContentWrapperView<FlowRoute: FlowRouteDestinationProtocol>: View {
 
     private func goTo(_ nextFlowRoute: FlowRoute?) {
         guard let nextFlowRoute else { return }
-        guard let nextRoute = nextFlowRoute.toBase() else {
-            logger.fault("Base convertion failed")
+        guard let nextRoute = nextFlowRoute.into() else {
+            logger.fault("Target convertion failed")
             return
         }
 

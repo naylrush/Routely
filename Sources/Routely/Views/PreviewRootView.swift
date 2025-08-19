@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-private struct PreviewProxyRoute<Route: RouteProtocol>: ProxyRouteDestinationProtocol, SelfProxy {
+private struct PreviewProxyRoute<Route: RouteProtocol>: ProxyRouteDestinationProtocol, SelfConvertible {
     let route: Route
 
     var body: some View {

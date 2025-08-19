@@ -18,9 +18,9 @@ extension RouteDestinationProtocol {
     public var wrapToRootView: Bool { true }
 }
 
-public protocol ProxyRouteProtocol: RouteProtocol, Proxy where Base: RouteProtocol {}
+public protocol ProxyRouteProtocol: RouteProtocol, Convertible where Target: RouteProtocol {}
 
 public protocol ProxyRouteDestinationProtocol:
     RouteDestinationProtocol,
     ProxyRouteProtocol
-where Base: RouteDestinationProtocol {}
+where Target: RouteDestinationProtocol {}

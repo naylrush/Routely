@@ -7,7 +7,7 @@ import Observation
 import RoutelyInterfaces
 
 final class ProxyEnhancedRouter<Route: ProxyRouteDestinationProtocol>: EnhancedRouter<Route> {
-    let wrapped = EnhancedRouter<Route.Base>()
+    let wrapped = EnhancedRouter<Route.Target>()
 
     override var id: UUID {
         wrapped.id

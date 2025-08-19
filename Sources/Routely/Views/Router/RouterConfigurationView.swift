@@ -6,7 +6,7 @@ import RoutelyInterfaces
 import SwiftUI
 
 struct RouterConfigurationView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
-    @Environment(EnhancedRouter<Route.Base>.self)
+    @Environment(EnhancedRouter<Route.Target>.self)
     private var externalRouter: EnhancedRouter?
 
     @State private var proxyRouter = ProxyEnhancedRouter<Route>()

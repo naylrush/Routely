@@ -18,9 +18,9 @@ struct ProxyFlowRoute<FlowRoute: FlowRouteDestinationProtocol>: FlowRouteDestina
     }
 
     // ProxyRouteProtocol
-    typealias Base = FlowRoute.Base
+    typealias Target = FlowRoute.Target
 
-    nonisolated init?(_ base: FlowRoute.Base) {
+    nonisolated init?(_ base: FlowRoute.Target) {
         if let route = FlowRoute(base) {
             self.route = route
         } else {
@@ -28,8 +28,8 @@ struct ProxyFlowRoute<FlowRoute: FlowRouteDestinationProtocol>: FlowRouteDestina
         }
     }
 
-    nonisolated func toBase() -> FlowRoute.Base? {
-        route.toBase()
+    nonisolated func into() -> FlowRoute.Target? {
+        route.into()
     }
 
     // View

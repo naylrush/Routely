@@ -9,13 +9,13 @@ public protocol EnhancedRouterProtocol<Wrapped>: RouterProtocol where Route == E
 }
 
 extension EnhancedRouterProtocol {
-    public func push(_ route: Route.Base) {
+    public func push(_ route: Route.Target) {
         push(.wrapped(route))
     }
 
     public func present(
         style: PresentationStyle,
-        _ route: Route.Base,
+        _ route: Route.Target,
         completion: (@MainActor () -> Void)? = nil
     ) {
         present(style: style, .wrapped(route), completion: completion)
@@ -23,7 +23,7 @@ extension EnhancedRouterProtocol {
 
     public func present<T>(
         style: PresentationStyle,
-        _ route: Route.Base,
+        _ route: Route.Target,
         completion: @escaping @MainActor (T?) -> Void
     ) {
         present(style: style, .wrapped(route), completion: completion)

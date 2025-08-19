@@ -8,14 +8,14 @@ import SwiftUI
 private struct DummyProxyRoute<Route: RouteDestinationProtocol>: ProxyRouteDestinationProtocol {
     let route: Route
 
-    // Proxy
-    typealias Base = Route
+    // Convertible
+    typealias Target = Route
 
-    nonisolated init?(_ route: Base) {
+    nonisolated init?(_ route: Target) {
         self.route = route
     }
 
-    nonisolated func toBase() -> Base? {
+    nonisolated func into() -> Target? {
         route
     }
 

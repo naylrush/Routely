@@ -9,7 +9,7 @@ extension EnhancedRoute:
     View,
     RouteDestinationProtocol,
     ProxyRouteDestinationProtocol
-where Base: RouteDestinationProtocol {
+where Wrapped: RouteDestinationProtocol {
     public var body: some View {
         switch self {
         case let .safari(url): SafariView(url: url)
