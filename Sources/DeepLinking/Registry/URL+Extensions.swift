@@ -19,7 +19,3 @@ extension URL {
         : pathComponents
     }
 }
-
-extension URL: @retroactive Identifiable {
-    public var id: String { absoluteString }
-}
