@@ -6,7 +6,7 @@ import DeepLinking
 import RoutelyInterfaces
 import SwiftUI
 
-struct ProxyRootView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
+struct ProxyRootView<Route: ConvertibleRoutableDestination, Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {

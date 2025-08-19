@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-private struct PreviewProxyRoute<Route: RouteProtocol>: ProxyRouteDestinationProtocol, SelfConvertible {
+private struct PreviewProxyRoute<Route: Routable>: ConvertibleRoutableDestination, SelfConvertible {
     let route: Route
 
     var body: some View {
@@ -13,7 +13,7 @@ private struct PreviewProxyRoute<Route: RouteProtocol>: ProxyRouteDestinationPro
     }
 }
 
-public struct PreviewRootView<Route: RouteProtocol, Content: View>: View {
+public struct PreviewRootView<Route: Routable, Content: View>: View {
     private let content: Content
 
     public init(@ViewBuilder content: () -> Content) {
@@ -28,7 +28,7 @@ public struct PreviewRootView<Route: RouteProtocol, Content: View>: View {
 }
 
 @MainActor
-public enum PreviewRootViewBuilder<Route: RouteProtocol> {
+public enum PreviewRootViewBuilder<Route: Routable> {
     public static func make(content: () -> some View) -> some View {
         PreviewRootView<Route, _>(content: content)
     }

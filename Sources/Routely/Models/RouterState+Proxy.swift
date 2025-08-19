@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 
 extension RouterState {
-    public convenience init<WrappedRoute: ProxyRouteProtocol, TargetRoute: RouteProtocol>(
+    public convenience init<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>(
         _ state: RouterState<EnhancedRoute<TargetRoute>>
     ) where Route == EnhancedRoute<WrappedRoute>, WrappedRoute.Target == TargetRoute {
         let path = state.path.compactMap(IdentifiableModel<Route>.init)
@@ -13,7 +13,7 @@ extension RouterState {
         self.init(path: path, presentationState: presentationState)
     }
 
-    public func into<ProxyRoute: ProxyRouteProtocol, TargetRoute: RouteProtocol>()
+    public func into<ProxyRoute: ConvertibleRoutable, TargetRoute: Routable>()
     -> RouterState<EnhancedRoute<TargetRoute>>
     where Route == EnhancedRoute<ProxyRoute>, ProxyRoute.Target == TargetRoute {
         .init(
@@ -24,14 +24,14 @@ extension RouterState {
 }
 
 extension PresentationState {
-    public init?<WrappedRoute: ProxyRouteProtocol, TargetRoute: RouteProtocol>(
+    public init?<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>(
         _ state: PresentationState<EnhancedRoute<TargetRoute>>
     ) where Route == EnhancedRoute<WrappedRoute>, WrappedRoute.Target == TargetRoute {
         guard let routeWithResult = RouteWithResult<Route>(state.routeWithResult) else { return nil }
         self.init(style: state.style, routeWithResult: routeWithResult)
     }
 
-    public func into<WrappedRoute: ProxyRouteProtocol, TargetRoute: RouteProtocol>()
+    public func into<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>()
     -> PresentationState<EnhancedRoute<TargetRoute>>?
     where Route == EnhancedRoute<WrappedRoute>, WrappedRoute.Target == TargetRoute {
         guard let target: RouteWithResult<EnhancedRoute<TargetRoute>> = routeWithResult.into() else { return nil }
@@ -40,14 +40,14 @@ extension PresentationState {
 }
 
 extension RouteWithResult {
-    public init?<WrappedRoute: ProxyRouteProtocol, TargetRoute: RouteProtocol>(
+    public init?<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>(
         _ value: RouteWithResult<EnhancedRoute<TargetRoute>>
     ) where Route == EnhancedRoute<WrappedRoute>, WrappedRoute.Target == TargetRoute {
         guard let route = Route(value.route) else { return nil }
         self.init(route: route, result: value.result)
     }
 
-    public func into<WrappedRoute: ProxyRouteProtocol, TargetRoute: RouteProtocol>()
+    public func into<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>()
     -> RouteWithResult<EnhancedRoute<TargetRoute>>?
     where Route == EnhancedRoute<WrappedRoute>, WrappedRoute.Target == TargetRoute {
         guard let target: EnhancedRoute<TargetRoute> = route.into() else { return nil }
@@ -56,14 +56,14 @@ extension RouteWithResult {
 }
 
 extension IdentifiableModel {
-    public init?<Route: ProxyRouteProtocol, TargetRoute: RouteProtocol>(
+    public init?<Route: ConvertibleRoutable, TargetRoute: Routable>(
         _ model: IdentifiableModel<EnhancedRoute<TargetRoute>>
     ) where T == EnhancedRoute<Route>, Route.Target == TargetRoute {
         guard let value = T(model.value) else { return nil }
         self.init(id: model.id, value: value)
     }
 
-    public func into<Route: ProxyRouteProtocol, TargetRoute: RouteProtocol>()
+    public func into<Route: ConvertibleRoutable, TargetRoute: Routable>()
     -> IdentifiableModel<EnhancedRoute<TargetRoute>>?
     where T == EnhancedRoute<Route>, Route.Target == TargetRoute {
         guard let target: EnhancedRoute<TargetRoute> = value.into() else { return nil }
@@ -71,8 +71,8 @@ extension IdentifiableModel {
     }
 }
 
-extension EnhancedRoute where Wrapped: ProxyRouteProtocol {
-    public init?<NestedWrapped: RouteProtocol>(
+extension EnhancedRoute where Wrapped: ConvertibleRoutable {
+    public init?<NestedWrapped: Routable>(
         _ route: EnhancedRoute<NestedWrapped>
     ) where Wrapped.Target == NestedWrapped {
         if case let .wrapped(nestedWrapped) = route, let base = Wrapped(nestedWrapped) {
@@ -82,7 +82,7 @@ extension EnhancedRoute where Wrapped: ProxyRouteProtocol {
         }
     }
 
-    public func into<NestedWrapped: RouteProtocol>()
+    public func into<NestedWrapped: Routable>()
     -> EnhancedRoute<NestedWrapped>?
     where Wrapped.Target == NestedWrapped {
         if case let .wrapped(wrapped) = self, let nestedWrapped = wrapped.into() {

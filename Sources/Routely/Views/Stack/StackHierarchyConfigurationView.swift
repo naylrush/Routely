@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct StackHierarchyConfigurationView<Route: RouteProtocol, Content: View>: View {
+struct StackHierarchyConfigurationView<Route: Routable, Content: View>: View {
     let router: Router<Route>
 
     // nil for root view of stack

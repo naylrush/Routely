@@ -7,7 +7,7 @@ import OSLog
 import RoutelyInterfaces
 import SwiftUI
 
-struct DeepLinkingView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
+struct DeepLinkingView<Route: ConvertibleRoutableDestination, Content: View>: View {
     @Environment(\.isTopHierarchy)
     private var isTopHierarchy
 

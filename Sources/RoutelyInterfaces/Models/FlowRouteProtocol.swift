@@ -4,9 +4,9 @@
 
 import Foundation
 
-public protocol FlowRouteProtocol: ProxyRouteProtocol, CaseIterable {}
+public protocol FlowRouteProtocol: ConvertibleRoutable, CaseIterable {}
 
-public protocol FlowRouteDestinationProtocol: FlowRouteProtocol, ProxyRouteDestinationProtocol {
+public protocol FlowRouteDestinationProtocol: FlowRouteProtocol, ConvertibleRoutableDestination {
     var flowPresentationStyle: FlowPresentationStyle { get }
 }
 

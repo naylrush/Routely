@@ -7,9 +7,9 @@ import SwiftUI
 
 extension EnhancedRoute:
     View,
-    RouteDestinationProtocol,
-    ProxyRouteDestinationProtocol
-where Wrapped: RouteDestinationProtocol {
+    RoutableDestination,
+    ConvertibleRoutableDestination
+where Wrapped: RoutableDestination {
     public var body: some View {
         switch self {
         case let .safari(url): SafariView(url: url)

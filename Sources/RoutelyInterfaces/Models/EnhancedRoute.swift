@@ -4,13 +4,13 @@
 
 import Foundation
 
-public enum EnhancedRoute<Wrapped: RouteProtocol>: RouteProtocol {
+public enum EnhancedRoute<Wrapped: Routable>: Routable {
     case wrapped(Wrapped)
 
     case safari(URL)
 }
 
-extension EnhancedRoute: ProxyRouteProtocol {
+extension EnhancedRoute: ConvertibleRoutable {
     public init?(_ wrapped: Wrapped) {
         self = .wrapped(wrapped)
     }

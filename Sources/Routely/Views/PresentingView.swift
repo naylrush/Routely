@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct PresentingView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
+struct PresentingView<Route: ConvertibleRoutableDestination, Content: View>: View {
     typealias RealRouter = EnhancedRouter<Route>
     private typealias RealRoute = RealRouter.Route
 
@@ -59,7 +59,7 @@ private struct DestinationConfigurationView<Destination: View>: View {
     }
 }
 
-private func route<Route: RouteProtocol>(
+private func route<Route: Routable>(
     _ base: Binding<PresentationState<Route>?>,
     withStyle style: PresentationStyle
 ) -> Binding<RouteWithResult<Route>?> {

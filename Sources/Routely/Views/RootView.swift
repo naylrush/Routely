@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-private struct DummyProxyRoute<Route: RouteDestinationProtocol>: ProxyRouteDestinationProtocol {
+private struct DummyProxyRoute<Route: RoutableDestination>: ConvertibleRoutableDestination {
     let route: Route
 
     // Convertible
@@ -29,7 +29,7 @@ private struct DummyProxyRoute<Route: RouteDestinationProtocol>: ProxyRouteDesti
     }
 }
 
-public struct RootView<Route: RouteDestinationProtocol, Content: View>: View {
+public struct RootView<Route: RoutableDestination, Content: View>: View {
     private let content: Content
 
     public init(@ViewBuilder content: () -> Content) {
@@ -52,7 +52,7 @@ extension RootView where Content == Route.Destination {
 }
 
 @MainActor
-enum RootViewBuilder<Route: RouteDestinationProtocol> {
+enum RootViewBuilder<Route: RoutableDestination> {
     @ViewBuilder
     static func wrap(
         `if` condition: Bool,

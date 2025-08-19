@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct RoutelyActionsConfigurationView<Route: RouteProtocol, Content: View>: View {
+struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
     @Environment(\.finishWholeRoute)
     private var finishWholeRoute
 

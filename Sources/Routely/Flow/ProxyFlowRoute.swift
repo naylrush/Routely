@@ -17,7 +17,7 @@ struct ProxyFlowRoute<FlowRoute: FlowRouteDestinationProtocol>: FlowRouteDestina
         FlowRoute.allCases.map { Self.init($0) }
     }
 
-    // ProxyRouteProtocol
+    // ConvertibleRoutable
     typealias Target = FlowRoute.Target
 
     nonisolated init?(_ base: FlowRoute.Target) {

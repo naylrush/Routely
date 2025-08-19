@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct StackView<Route: RouteDestinationProtocol, Content: View>: View {
+struct StackView<Route: RoutableDestination, Content: View>: View {
     @Bindable var router: Router<Route>
     @ViewBuilder let content: Content
 

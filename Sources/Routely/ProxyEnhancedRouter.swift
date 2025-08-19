@@ -6,7 +6,7 @@ import Foundation
 import Observation
 import RoutelyInterfaces
 
-final class ProxyEnhancedRouter<Route: ProxyRouteDestinationProtocol>: EnhancedRouter<Route> {
+final class ProxyEnhancedRouter<Route: ConvertibleRoutableDestination>: EnhancedRouter<Route> {
     let wrapped = EnhancedRouter<Route.Target>()
 
     override var id: UUID {

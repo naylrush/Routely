@@ -7,12 +7,12 @@ import OSLog
 import RoutelyInterfaces
 import SwiftUI
 
-public class EnhancedRouter<Route: RouteProtocol>: Router<EnhancedRoute<Route>>, EnhancedRouterProtocol {
+public class EnhancedRouter<Route: Routable>: Router<EnhancedRoute<Route>>, EnhancedRouterProtocol {
     public typealias Wrapped = Route
 }
 
 @Observable
-public class Router<Route: RouteProtocol>: RouterProtocol {
+public class Router<Route: Routable>: RouterProtocol {
     public nonisolated var id: UUID { _id }
     private nonisolated let _id = UUID()
 

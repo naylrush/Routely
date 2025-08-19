@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct OpenURLOverridingView<Route: RouteProtocol, Content: View>: View {
+struct OpenURLOverridingView<Route: Routable, Content: View>: View {
     let router: EnhancedRouter<Route>
     @ViewBuilder let content: Content
 

@@ -5,7 +5,7 @@
 import SwiftUI
 
 public protocol EnhancedRouterProtocol<Wrapped>: RouterProtocol where Route == EnhancedRoute<Wrapped> {
-    associatedtype Wrapped: RouteProtocol
+    associatedtype Wrapped: Routable
 }
 
 extension EnhancedRouterProtocol {

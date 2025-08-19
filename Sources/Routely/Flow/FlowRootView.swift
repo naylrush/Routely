@@ -39,7 +39,7 @@ extension PreviewRoute: FlowRouteDestinationProtocol {
     }
 }
 
-extension PreviewRoute: RouteDestinationProtocol {
+extension PreviewRoute: RoutableDestination {
     public var body: some View {
         switch self {
         case .first: ContentView(route: .first)

@@ -6,7 +6,7 @@ import Foundation
 import RoutelyInterfaces
 
 public protocol DeepLinkProtocol: Sendable {
-    associatedtype Route: RouteProtocol
+    associatedtype Route: Routable
 
     var path: String { get }
 }

@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct RouterConfigurationView<Route: ProxyRouteDestinationProtocol, Content: View>: View {
+struct RouterConfigurationView<Route: ConvertibleRoutableDestination, Content: View>: View {
     @Environment(EnhancedRouter<Route.Target>.self)
     private var externalRouter: EnhancedRouter?
 

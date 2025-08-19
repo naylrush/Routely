@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct ExternalRouterConfigurationView<Route: RouteProtocol, Content: View>: View {
+struct ExternalRouterConfigurationView<Route: Routable, Content: View>: View {
     private let content: Content
 
     init(

@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct HierarchyConfigurationView<Route: RouteProtocol, Content: View>: View {
+struct HierarchyConfigurationView<Route: Routable, Content: View>: View {
     private let manager = Manager.shared
 
     let externalRouter: Router<Route>?

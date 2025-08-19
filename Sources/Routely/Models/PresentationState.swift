@@ -5,7 +5,7 @@
 import Foundation
 import RoutelyInterfaces
 
-struct PresentationState<Route: RouteProtocol>: Equatable, Sendable {
+struct PresentationState<Route: Routable>: Equatable, Sendable {
     let style: PresentationStyle
     let routeWithResult: RouteWithResult<Route>
 }

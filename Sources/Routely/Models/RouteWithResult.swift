@@ -5,7 +5,7 @@
 import Foundation
 import RoutelyInterfaces
 
-struct RouteWithResult<Route: RouteProtocol>: Equatable, Sendable {
+struct RouteWithResult<Route: Routable>: Equatable, Sendable {
     let route: Route
     let result: RoutelyResult?
 }
