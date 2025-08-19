@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-public struct FlowRootView<FlowRoute: FlowRouteDestinationProtocol>: View {
+public struct FlowRootView<FlowRoute: FlowRoutableDestination>: View {
     private let initialRoute: FlowRoute
 
     public init(initialRoute: FlowRoute) {
@@ -22,7 +22,7 @@ public struct FlowRootView<FlowRoute: FlowRouteDestinationProtocol>: View {
     FlowRootView(initialRoute: PreviewRoute.first)
 }
 
-public enum PreviewRoute: FlowRouteProtocol, SelfConvertible {
+public enum PreviewRoute: FlowRoutable, SelfConvertible {
     case first
     case second
     case third
@@ -30,7 +30,7 @@ public enum PreviewRoute: FlowRouteProtocol, SelfConvertible {
     case fifth
 }
 
-extension PreviewRoute: FlowRouteDestinationProtocol {
+extension PreviewRoute: FlowRoutableDestination {
     public var flowPresentationStyle: FlowPresentationStyle {
         switch self {
         case .first, .second, .fourth, .fifth: .push

@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct ProxyFlowRoute<FlowRoute: FlowRouteDestinationProtocol>: FlowRouteDestinationProtocol {
+struct ProxyFlowRoute<FlowRoute: FlowRoutableDestination>: FlowRoutableDestination {
     let route: FlowRoute
 
     nonisolated init(_ route: FlowRoute) {

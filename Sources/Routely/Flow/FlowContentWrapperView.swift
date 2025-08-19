@@ -6,7 +6,7 @@ import OSLog
 import RoutelyInterfaces
 import SwiftUI
 
-struct FlowContentWrapperView<FlowRoute: FlowRouteDestinationProtocol>: View {
+struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
     @Environment(CompositeRouter<FlowRoute.Target>.self)
     private var router
 
