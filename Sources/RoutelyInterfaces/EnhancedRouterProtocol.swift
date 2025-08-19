@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public protocol EnhancedRouterProtocol<Wrapped>: RouterProtocol where Route == EnhancedRoute<Wrapped> {
+public protocol EnhancedRouterProtocol<Wrapped>: Routing where Route == EnhancedRoute<Wrapped> {
     associatedtype Wrapped: Routable
 }
 

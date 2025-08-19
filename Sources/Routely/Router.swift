@@ -12,7 +12,7 @@ public class EnhancedRouter<Route: Routable>: Router<EnhancedRoute<Route>>, Enha
 }
 
 @Observable
-public class Router<Route: Routable>: RouterProtocol {
+public class Router<Route: Routable>: Routing {
     public nonisolated var id: UUID { _id }
     private nonisolated let _id = UUID()
 

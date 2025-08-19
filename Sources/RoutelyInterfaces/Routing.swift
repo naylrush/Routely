@@ -5,7 +5,7 @@
 import SwiftUI
 
 @MainActor
-public protocol RouterProtocol<Route>: AnyObject, Sendable, Observable {
+public protocol Routing<Route>: AnyObject, Sendable, Observable {
     associatedtype Route: Routable
 
     /// Pushes a new route onto the navigation path.
@@ -57,7 +57,7 @@ public protocol RouterProtocol<Route>: AnyObject, Sendable, Observable {
     func externalRouterDismiss() -> Bool
 }
 
-extension RouterProtocol {
+extension Routing {
     public func present(
         style: PresentationStyle,
         _ route: Route,
