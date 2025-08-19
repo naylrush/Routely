@@ -7,7 +7,7 @@ import RoutelyInterfaces
 import SwiftUI
 
 struct FlowContentWrapperView<FlowRoute: FlowRouteDestinationProtocol>: View {
-    @Environment(EnhancedRouter<FlowRoute.Target>.self)
+    @Environment(CompositeRouter<FlowRoute.Target>.self)
     private var router
 
     @Environment(\.routingResult)

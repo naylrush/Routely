@@ -5,17 +5,17 @@
 import RoutelyInterfaces
 import SwiftUI
 
-struct PresentingView<Route: ConvertibleRoutableDestination, Content: View>: View {
-    typealias RealRouter = EnhancedRouter<Route>
-    private typealias RealRoute = RealRouter.Route
+struct PresentingView<ConvertibleRoute: ConvertibleRoutableDestination, Content: View>: View {
+    typealias Router = CompositeRouter<ConvertibleRoute>
+    private typealias Route = Router.Route
 
-    @Bindable var router: RealRouter
+    @Bindable var router: Router
     @ViewBuilder let content: Content
 
-    private var fullScreenRoute: Binding<RouteWithResult<RealRoute>?> {
+    private var fullScreenRoute: Binding<RouteWithResult<Route>?> {
         route($router.state.presentationState, withStyle: .fullScreen)
     }
-    private var sheetRoute: Binding<RouteWithResult<RealRoute>?> {
+    private var sheetRoute: Binding<RouteWithResult<Route>?> {
         route($router.state.presentationState, withStyle: .sheet())
     }
     private var sheetDismissalBehavior: Binding<SheetDismissalBehavior> {
@@ -35,11 +35,11 @@ struct PresentingView<Route: ConvertibleRoutableDestination, Content: View>: Vie
     }
 
     private func DestinationWrapper<WrappedContent: View>(
-        routeWithResult: RouteWithResult<RealRoute>,
-        @ViewBuilder wrapping: (RealRoute.Destination) -> WrappedContent
+        routeWithResult: RouteWithResult<Route>,
+        @ViewBuilder wrapping: (Route.Destination) -> WrappedContent
     ) -> some View {
         DestinationConfigurationView(providedRoutelyResult: routeWithResult.result) {
-            RootViewBuilder<Route.Target>.wrap(if: routeWithResult.route.wrapToRootView) {
+            RootViewBuilder<ConvertibleRoute.Target>.wrap(if: routeWithResult.route.wrapToRootView) {
                 wrapping(routeWithResult.route.destination)
             }
         }

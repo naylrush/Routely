@@ -6,7 +6,7 @@ import RoutelyInterfaces
 import SwiftUI
 
 struct OpenURLOverridingView<Route: Routable, Content: View>: View {
-    let router: EnhancedRouter<Route>
+    let router: CompositeRouter<Route>
     @ViewBuilder let content: Content
 
     private var openUrlAction: OpenURLAction {

@@ -6,12 +6,12 @@ import RoutelyInterfaces
 import SwiftUI
 
 struct RouterConfigurationView<Route: ConvertibleRoutableDestination, Content: View>: View {
-    @Environment(EnhancedRouter<Route.Target>.self)
-    private var externalRouter: EnhancedRouter?
+    @Environment(CompositeRouter<Route.Target>.self)
+    private var externalRouter: CompositeRouter?
 
-    @State private var proxyRouter = ProxyEnhancedRouter<Route>()
+    @State private var proxyRouter = CompositeConvertibleRouter<Route>()
 
-    @ViewBuilder let content: (ProxyEnhancedRouter<Route>) -> Content
+    @ViewBuilder let content: (CompositeConvertibleRouter<Route>) -> Content
 
     var body: some View {
         let router = proxyRouter.wrapped

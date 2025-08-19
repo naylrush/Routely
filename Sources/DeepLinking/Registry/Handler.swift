@@ -9,7 +9,7 @@ import RoutelyInterfaces
 public protocol Handler: Sendable {
     associatedtype DeepLink: DeepLinkProtocol
 
-    func handle<Router: EnhancedRouterProtocol>(
+    func handle<Router: CompositeRouting>(
         router: Router,
         deepLink: DeepLink
     ) async throws where Router.Wrapped == DeepLink.Route

@@ -17,7 +17,7 @@ struct DeepLinkingView<Route: ConvertibleRoutableDestination, Content: View>: Vi
     private let manager = DeepLinking.Manager.shared
     private let registry = DeepLinking.Registry.shared
 
-    let router: ProxyEnhancedRouter<Route>
+    let router: CompositeConvertibleRouter<Route>
     @ViewBuilder let content: Content
 
     var body: some View {

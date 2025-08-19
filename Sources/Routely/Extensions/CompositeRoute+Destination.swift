@@ -5,7 +5,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-extension EnhancedRoute:
+extension CompositeRoute:
     View,
     RoutableDestination,
     ConvertibleRoutableDestination

@@ -4,11 +4,11 @@
 
 import SwiftUI
 
-public protocol EnhancedRouterProtocol<Wrapped>: Routing where Route == EnhancedRoute<Wrapped> {
+public protocol CompositeRouting<Wrapped>: Routing where Route == CompositeRoute<Wrapped> {
     associatedtype Wrapped: Routable
 }
 
-extension EnhancedRouterProtocol {
+extension CompositeRouting {
     public func push(_ route: Route.Target) {
         push(.wrapped(route))
     }

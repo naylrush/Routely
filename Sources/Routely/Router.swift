@@ -7,7 +7,7 @@ import OSLog
 import RoutelyInterfaces
 import SwiftUI
 
-public class EnhancedRouter<Route: Routable>: Router<EnhancedRoute<Route>>, EnhancedRouterProtocol {
+public class CompositeRouter<Route: Routable>: Router<CompositeRoute<Route>>, CompositeRouting {
     public typealias Wrapped = Route
 }
 

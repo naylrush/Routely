@@ -4,13 +4,13 @@
 
 import Foundation
 
-public enum EnhancedRoute<Wrapped: Routable>: Routable {
+public enum CompositeRoute<Wrapped: Routable>: Routable {
     case wrapped(Wrapped)
 
     case safari(URL)
 }
 
-extension EnhancedRoute: ConvertibleRoutable {
+extension CompositeRoute: ConvertibleRoutable {
     public init?(_ wrapped: Wrapped) {
         self = .wrapped(wrapped)
     }

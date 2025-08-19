@@ -7,7 +7,7 @@ import OSLog
 import RoutelyInterfaces
 import SwiftUI
 
-typealias EnhancedRouterState<Route: Routable> = RouterState<EnhancedRoute<Route>>
+typealias CompositeRouterState<Route: Routable> = RouterState<CompositeRoute<Route>>
 
 @Observable
 class RouterState<Route: Routable> {
