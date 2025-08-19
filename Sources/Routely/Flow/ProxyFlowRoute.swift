@@ -19,9 +19,11 @@ struct ProxyFlowRoute<FlowRoute: FlowRouteDestinationProtocol>: FlowRouteDestina
 
     // ConvertibleRoutable
     typealias Target = FlowRoute.Target
+    typealias FromType = Target
+    typealias IntoType = Target?
 
-    nonisolated init?(_ base: FlowRoute.Target) {
-        if let route = FlowRoute(base) {
+    nonisolated init?(_ target: FlowRoute.Target) {
+        if let route = FlowRoute(target) {
             self.route = route
         } else {
             return nil
