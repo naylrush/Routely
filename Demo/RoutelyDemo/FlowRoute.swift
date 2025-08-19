@@ -1,7 +1,7 @@
 import RoutelyInterfaces
 import SwiftUI
 
-public enum FlowRoute: FlowRouteProtocol {
+public enum FlowRoute: FlowRoutable, SelfConvertible {
     case first
     case second
     case third
@@ -9,7 +9,7 @@ public enum FlowRoute: FlowRouteProtocol {
     case fifth
 }
 
-extension FlowRoute: ProxyRouteDestinationProtocol {
+extension FlowRoute: RoutableDestination {
     public var body: some View {
         switch self {
         case .first: DestinationView(route: .first)
@@ -21,7 +21,7 @@ extension FlowRoute: ProxyRouteDestinationProtocol {
     }
 }
 
-extension FlowRoute: FlowRouteDestinationProtocol {
+extension FlowRoute: FlowRoutableDestination {
     public var flowPresentationStyle: FlowPresentationStyle {
         switch self {
         case .first, .second, .fourth, .fifth: .push
@@ -44,9 +44,6 @@ private struct DestinationView: View {
             Text(String(describing: route))
 
             Button {
-                if case .present = route.flowPresentationStyle {
-                    dismiss()
-                }
                 next()
             } label: {
                 Text("Push Next")
