@@ -2,9 +2,7 @@
 // Copyright © 2025 Движ
 //
 
-import DeepLinking
 import OSLog
-import RoutelyInterfaces
 import SwiftUI
 
 struct DeepLinkingView<Route: ConvertibleRoutableDestination, Content: View>: View {
@@ -14,8 +12,8 @@ struct DeepLinkingView<Route: ConvertibleRoutableDestination, Content: View>: Vi
     @Environment(\.isDeepLinkHandlingEnabled)
     private var isDeepLinkHandlingEnabled
 
-    private let manager = DeepLinking.Manager.shared
-    private let registry = DeepLinking.Registry.shared
+    private let manager = DeepLinkingManager.shared
+    private let registry = DeepLinkingRegistry.shared
 
     let router: CompositeConvertibleRouter<Route>
     @ViewBuilder let content: Content

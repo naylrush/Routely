@@ -4,7 +4,6 @@
 
 import Observation
 import OSLog
-import RoutelyInterfaces
 import SwiftUI
 
 typealias CompositeRouterState<Route: Routable> = RouterState<CompositeRoute<Route>>

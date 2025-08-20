@@ -3,7 +3,6 @@
 //
 
 import Foundation
-import RoutelyInterfaces
 
 struct PresentationState<Route: Routable>: Equatable, Sendable {
     let style: PresentationStyle

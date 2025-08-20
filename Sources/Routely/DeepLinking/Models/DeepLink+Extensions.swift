@@ -4,14 +4,14 @@
 
 import Foundation
 
-extension DeepLinkProtocol {
+extension DeepLink {
     @MainActor public var asDeepLink: URL? {
-        let path = "\(Configuration.shared.appScheme)://\(path)"
+        let path = "\(DeepLinkingConfiguration.shared.appScheme)://\(path)"
         return URL(string: path)
     }
 
     @MainActor public var asUniversalLink: URL? {
-        let path = "\(Configuration.shared.httpScheme)://\(Configuration.shared.urlHost)/\(path)"
+        let path = "\(DeepLinkingConfiguration.shared.httpScheme)://\(DeepLinkingConfiguration.shared.urlHost)/\(path)"
         return URL(string: path)
     }
 }

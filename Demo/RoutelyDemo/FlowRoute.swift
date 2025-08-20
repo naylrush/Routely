@@ -1,4 +1,4 @@
-import RoutelyInterfaces
+import Routely
 import SwiftUI
 
 public enum FlowRoute: FlowRoutable, SelfConvertible {

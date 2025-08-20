@@ -2,9 +2,7 @@
 // Copyright © 2025 Движ
 //
 
-import DeepLinking
 import OSLog
-import RoutelyInterfaces
 import SwiftUI
 
 struct DeepLinkingWrapperView<Route: ConvertibleRoutableDestination, Content: View>: View {
@@ -13,7 +11,7 @@ struct DeepLinkingWrapperView<Route: ConvertibleRoutableDestination, Content: Vi
     @ViewBuilder var content: Content
 
     var body: some View {
-        if DeepLinking.Configuration.isEnabled {
+        if DeepLinkingConfiguration.isEnabled {
             DeepLinkingView(router: router) {
                 content
             }

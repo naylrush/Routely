@@ -2,7 +2,6 @@
 // Copyright © 2025 Движ
 //
 
-import RoutelyInterfaces
 import SwiftUI
 
 struct OpenURLOverridingView<Route: Routable, Content: View>: View {

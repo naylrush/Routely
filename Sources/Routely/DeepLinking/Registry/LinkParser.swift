@@ -19,7 +19,7 @@ enum LinkParser {
     }
 
     static func parseAppDeepLink(url: URL) -> RawDeepLink? {
-        guard url.scheme == Configuration.shared.appScheme else {
+        guard url.scheme == DeepLinkingConfiguration.shared.appScheme else {
             return nil
         }
         let path = url.sanitizingPath()
@@ -33,7 +33,7 @@ enum LinkParser {
     }
 
     static func parseUniversalLink(url: URL) -> RawDeepLink? {
-        guard url.isHttpScheme, url.host() == Configuration.shared.urlHost else {
+        guard url.isHttpScheme, url.host() == DeepLinkingConfiguration.shared.urlHost else {
             return nil
         }
         let path = url.sanitizingPath()

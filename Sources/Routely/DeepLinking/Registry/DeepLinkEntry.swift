@@ -3,22 +3,21 @@
 //
 
 import Foundation
-import RoutelyInterfaces
 
 public protocol DeepLinkEntryProtocol: Actor {
-    associatedtype DeepLink: DeepLinkProtocol
-    associatedtype DeepLinkHandler: Handler where DeepLinkHandler.DeepLink == DeepLink
+    associatedtype DeepLinkType: DeepLink
+    associatedtype DeepLinkHandler: DeepLinkHandling where DeepLinkHandler.DeepLinkType == DeepLinkType
 
-    func parseDeepLink(rawDeepLink: RawDeepLink) async throws -> DeepLink?
+    func parseDeepLink(rawDeepLink: RawDeepLink) async throws -> DeepLinkType?
     func makeHandler() async throws -> DeepLinkHandler
 }
 
 public actor DeepLinkEntry<
     RegexOutput,
-    DeepLink: DeepLinkProtocol,
-    DeepLinkHandler: Handler
->: DeepLinkEntryProtocol where DeepLinkHandler.DeepLink == DeepLink {
-    public typealias DeepLinkBuilder = @Sendable (RegexOutput) throws -> DeepLink?
+    DeepLinkType: DeepLink,
+    DeepLinkHandler: DeepLinkHandling
+>: DeepLinkEntryProtocol where DeepLinkHandler.DeepLinkType == DeepLinkType {
+    public typealias DeepLinkBuilder = @Sendable (RegexOutput) throws -> DeepLinkType?
     public typealias HandlerBuilder = @Sendable @MainActor () throws -> DeepLinkHandler
 
     private let regex: Regex<RegexOutput>
@@ -35,7 +34,7 @@ public actor DeepLinkEntry<
         self.handler = handler
     }
 
-    public func parseDeepLink(rawDeepLink: RawDeepLink) async throws -> DeepLink? {
+    public func parseDeepLink(rawDeepLink: RawDeepLink) async throws -> DeepLinkType? {
         guard let output = try regex.wholeMatch(in: rawDeepLink.path)?.output,
               let deepLink = try deepLink(output) else { return nil }
         return deepLink

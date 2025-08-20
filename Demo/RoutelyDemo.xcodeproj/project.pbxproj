@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6D03914D2E50DAFE009F0587 /* DeepLinking in Frameworks */ = {isa = PBXBuildFile; productRef = 6D03914C2E50DAFE009F0587 /* DeepLinking */; };
 		6D03914F2E50DAFE009F0587 /* Routely in Frameworks */ = {isa = PBXBuildFile; productRef = 6D03914E2E50DAFE009F0587 /* Routely */; };
-		6D0391512E50DAFE009F0587 /* RoutelyInterfaces in Frameworks */ = {isa = PBXBuildFile; productRef = 6D0391502E50DAFE009F0587 /* RoutelyInterfaces */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,9 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D03914D2E50DAFE009F0587 /* DeepLinking in Frameworks */,
 				6D03914F2E50DAFE009F0587 /* Routely in Frameworks */,
-				6D0391512E50DAFE009F0587 /* RoutelyInterfaces in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,9 +70,7 @@
 			);
 			name = RoutelyDemo;
 			packageProductDependencies = (
-				6D03914C2E50DAFE009F0587 /* DeepLinking */,
 				6D03914E2E50DAFE009F0587 /* Routely */,
-				6D0391502E50DAFE009F0587 /* RoutelyInterfaces */,
 			);
 			productName = RoutelyDemo;
 			productReference = 6D0391352E50DAA6009F0587 /* RoutelyDemo.app */;
@@ -367,17 +361,9 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6D03914C2E50DAFE009F0587 /* DeepLinking */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DeepLinking;
-		};
 		6D03914E2E50DAFE009F0587 /* Routely */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Routely;
-		};
-		6D0391502E50DAFE009F0587 /* RoutelyInterfaces */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = RoutelyInterfaces;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

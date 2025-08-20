@@ -4,7 +4,6 @@
 
 import Foundation
 import Observation
-import RoutelyInterfaces
 
 final class CompositeConvertibleRouter<
     ConvertibleRoute: ConvertibleRoutableDestination

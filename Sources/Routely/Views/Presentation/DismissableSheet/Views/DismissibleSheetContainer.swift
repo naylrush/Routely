@@ -2,7 +2,6 @@
 // Copyright © 2025 Движ
 //
 
-import RoutelyInterfaces
 import SwiftUI
 
 struct DismissibleSheetContainer<Content: View>: UIViewControllerRepresentable {

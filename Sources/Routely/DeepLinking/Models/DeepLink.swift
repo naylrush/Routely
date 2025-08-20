@@ -3,9 +3,8 @@
 //
 
 import Foundation
-import RoutelyInterfaces
 
-public protocol DeepLinkProtocol: Sendable {
+public protocol DeepLink: Sendable {
     associatedtype Route: Routable
 
     var path: String { get }

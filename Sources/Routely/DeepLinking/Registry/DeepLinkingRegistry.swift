@@ -4,11 +4,10 @@
 
 import Foundation
 import OSLog
-import RoutelyInterfaces
 
 @MainActor
-public final class Registry {
-    public static let shared = Registry()
+public final class DeepLinkingRegistry {
+    public static let shared = DeepLinkingRegistry()
 
     private var entries: [any DeepLinkEntryProtocol] = []
 
@@ -35,7 +34,7 @@ extension DeepLinkEntryProtocol {
         router: any CompositeRouting,
         rawDeepLink: RawDeepLink
     ) async throws -> Bool {
-        guard let router = router as? any CompositeRouting<DeepLink.Route>,
+        guard let router = router as? any CompositeRouting<DeepLinkType.Route>,
               let deepLink = try await parseDeepLink(rawDeepLink: rawDeepLink) else { return false }
         let handler = try await makeHandler()
         try await handler.handle(router: router, deepLink: deepLink)

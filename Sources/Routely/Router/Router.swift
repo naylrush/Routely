@@ -4,7 +4,6 @@
 
 import Observation
 import OSLog
-import RoutelyInterfaces
 import SwiftUI
 
 public class CompositeRouter<Route: Routable>: Router<CompositeRoute<Route>>, CompositeRouting {

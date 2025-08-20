@@ -5,7 +5,7 @@
 import Foundation
 
 @MainActor
-public struct Configuration {
+public struct DeepLinkingConfiguration {
     public static var shared: Self! {
         didSet { isEnabled = true }
     }

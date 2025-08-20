@@ -2,8 +2,6 @@
 // Copyright © 2025 Движ
 //
 
-import RoutelyInterfaces
-
 extension RouterState {
     public convenience init<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>(
         _ state: RouterState<CompositeRoute<TargetRoute>>

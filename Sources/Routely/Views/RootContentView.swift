@@ -2,8 +2,6 @@
 // Copyright © 2025 Движ
 //
 
-import DeepLinking
-import RoutelyInterfaces
 import SwiftUI
 
 struct RootContentView<ConvertibleRoute: ConvertibleRoutableDestination, Content: View>: View {
