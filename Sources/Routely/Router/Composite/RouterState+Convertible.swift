@@ -3,7 +3,7 @@
 //
 
 extension RouterState {
-    public convenience init<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>(
+    public init<WrappedRoute: ConvertibleRoutable, TargetRoute: Routable>(
         _ state: RouterState<CompositeRoute<TargetRoute>>
     ) where Route == CompositeRoute<WrappedRoute>, WrappedRoute.Target == TargetRoute {
         let path = state.path.compactMap(IdentifiableModel<Route>.init)

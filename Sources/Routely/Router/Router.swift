@@ -15,7 +15,9 @@ public class Router<Route: Routable>: Routing {
     public nonisolated var id: UUID { _id }
     private nonisolated let _id = UUID()
 
-    var state = RouterState<Route>()
+    var state = RouterState<Route>() {
+        willSet { _willSetPresentationState(state.presentationState) }
+    }
 
     @ObservationIgnored var onExternalRouterDismiss: (() -> Void)?
 
@@ -122,6 +124,25 @@ public class Router<Route: Routable>: Routing {
         logger.debug("Calling dismiss action on external router")
         onExternalRouterDismiss()
         return true
+    }
+}
+
+extension Router {
+    private func _willSetPresentationState(_ oldValue: PresentationState<Route>?) {
+        guard let oldValue else {
+            return
+        }
+
+        guard let result = oldValue.routeWithResult.result else {
+            logger.debug("Completing presentation without result")
+            return
+        }
+
+        logger.debug("Completing presentation with result id: \(result.id)")
+
+        Task { @MainActor in
+            result.complete()
+        }
     }
 }
 
