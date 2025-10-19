@@ -6,10 +6,6 @@ import Observation
 import OSLog
 import SwiftUI
 
-public class CompositeRouter<Route: Routable>: Router<CompositeRoute<Route>>, CompositeRouting {
-    public typealias Wrapped = Route
-}
-
 @Observable
 public class Router<Route: Routable>: Routing {
     public nonisolated var id: UUID { _id }
@@ -21,7 +17,13 @@ public class Router<Route: Routable>: Routing {
 
     @ObservationIgnored var onExternalRouterDismiss: (() -> Void)?
 
-    init() {}
+    init() {
+        logger.debug("init \(self.id)")
+    }
+
+    deinit {
+        logger.debug("deinit \(self.id)")
+    }
 
     public func push(_ route: Route) {
         logger.debug("Pushing \(String(describing: route))")

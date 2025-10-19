@@ -5,6 +5,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 public protocol Routable: Hashable, Sendable {}
 
 public protocol RoutableDestination: Routable, View {

@@ -5,16 +5,13 @@
 import SwiftUI
 
 struct PresentingView<ConvertibleRoute: ConvertibleRoutableDestination, Content: View>: View {
-    typealias Router = CompositeRouter<ConvertibleRoute>
-    private typealias Route = Router.Route
-
-    @Bindable var router: Router
+    @Bindable var router: Router<ConvertibleRoute>
     @ViewBuilder let content: Content
 
-    private var fullScreenRoute: Binding<RouteWithResult<Route>?> {
+    private var fullScreenRoute: Binding<RouteWithResult<ConvertibleRoute>?> {
         route($router.state.presentationState, withStyle: .fullScreen)
     }
-    private var sheetRoute: Binding<RouteWithResult<Route>?> {
+    private var sheetRoute: Binding<RouteWithResult<ConvertibleRoute>?> {
         route($router.state.presentationState, withStyle: .sheet())
     }
     private var sheetDismissalBehavior: Binding<SheetDismissalBehavior> {
@@ -34,8 +31,8 @@ struct PresentingView<ConvertibleRoute: ConvertibleRoutableDestination, Content:
     }
 
     private func DestinationWrapper<WrappedContent: View>(
-        routeWithResult: RouteWithResult<Route>,
-        @ViewBuilder wrapping: (Route.Destination) -> WrappedContent
+        routeWithResult: RouteWithResult<ConvertibleRoute>,
+        @ViewBuilder wrapping: (ConvertibleRoute.Destination) -> WrappedContent
     ) -> some View {
         DestinationConfigurationView(providedRoutelyResult: routeWithResult.result) {
             RootViewBuilder<ConvertibleRoute.Target>.wrap(if: routeWithResult.route.wrapToRootView) {

@@ -8,8 +8,8 @@ import Foundation
 public protocol DeepLinkHandling: Sendable {
     associatedtype DeepLinkType: DeepLink
 
-    func handle<Router: CompositeRouting>(
+    func handle<Router: Routing>(
         router: Router,
         deepLink: DeepLinkType
-    ) async throws where Router.Wrapped == DeepLinkType.Route
+    ) async throws where Router.Route == DeepLinkType.Route
 }

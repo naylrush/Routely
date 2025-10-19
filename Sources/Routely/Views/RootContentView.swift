@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct RootContentView<ConvertibleRoute: ConvertibleRoutableDestination, Content: View>: View {
+struct RootContentView<ConvertibleRoute: ConvertibleRoutableDestination & WebRoutable, Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {

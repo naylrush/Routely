@@ -16,7 +16,7 @@ public final class DeepLinkingRegistry {
     }
 
     public func handle(
-        router: any CompositeRouting,
+        router: any Routing,
         rawDeepLink: RawDeepLink
     ) async throws -> Bool {
         for entry in entries where try await entry.parseAndHandle(
@@ -31,10 +31,10 @@ public final class DeepLinkingRegistry {
 
 extension DeepLinkEntryProtocol {
     fileprivate func parseAndHandle(
-        router: any CompositeRouting,
+        router: any Routing,
         rawDeepLink: RawDeepLink
     ) async throws -> Bool {
-        guard let router = router as? any CompositeRouting<DeepLinkType.Route>,
+        guard let router = router as? any Routing<DeepLinkType.Route>,
               let deepLink = try await parseDeepLink(rawDeepLink: rawDeepLink) else { return false }
         let handler = try await makeHandler()
         try await handler.handle(router: router, deepLink: deepLink)

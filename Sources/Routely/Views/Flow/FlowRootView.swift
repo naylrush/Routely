@@ -18,10 +18,10 @@ public struct FlowRootView<FlowRoute: FlowRoutableDestination>: View {
 
 #if DEBUG
 #Preview {
-    FlowRootView(initialRoute: PreviewRoute.first)
+    FlowRootView(initialRoute: PreviewFlowRoute.first)
 }
 
-public enum PreviewRoute: FlowRoutable, SelfConvertible {
+private enum PreviewFlowRoute: FlowRoutable, SelfConvertible {
     case first
     case second
     case third
@@ -29,8 +29,8 @@ public enum PreviewRoute: FlowRoutable, SelfConvertible {
     case fifth
 }
 
-extension PreviewRoute: FlowRoutableDestination {
-    public var flowPresentationStyle: FlowPresentationStyle {
+extension PreviewFlowRoute: FlowRoutableDestination {
+    var flowPresentationStyle: FlowPresentationStyle {
         switch self {
         case .first, .second, .fourth, .fifth: .push
         case .third: .present(.sheet())
@@ -38,8 +38,8 @@ extension PreviewRoute: FlowRoutableDestination {
     }
 }
 
-extension PreviewRoute: RoutableDestination {
-    public var body: some View {
+extension PreviewFlowRoute: RoutableDestination {
+    var body: some View {
         switch self {
         case .first: ContentView(route: .first)
         case .second: ContentView(route: .second)
@@ -57,7 +57,7 @@ private struct ContentView: View {
     @Environment(\.dvijDismiss)
     private var dismiss
 
-    let route: PreviewRoute
+    let route: PreviewFlowRoute
 
     var body: some View {
         VStack {
@@ -75,6 +75,7 @@ private struct ContentView: View {
                     }
             }
         }
+        .presentationBackground(.white)
     }
 }
 #endif

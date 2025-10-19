@@ -5,7 +5,7 @@
 import OSLog
 import SwiftUI
 
-struct DeepLinkingView<Route: ConvertibleRoutableDestination, Content: View>: View {
+struct DeepLinkingView<Route: Routable, Content: View>: View {
     @Environment(\.isTopHierarchy)
     private var isTopHierarchy
 
@@ -15,7 +15,7 @@ struct DeepLinkingView<Route: ConvertibleRoutableDestination, Content: View>: Vi
     private let manager = DeepLinkingManager.shared
     private let registry = DeepLinkingRegistry.shared
 
-    let router: CompositeConvertibleRouter<Route>
+    let router: Router<Route>
     @ViewBuilder let content: Content
 
     var body: some View {
@@ -48,7 +48,7 @@ struct DeepLinkingView<Route: ConvertibleRoutableDestination, Content: View>: Vi
         }
 
         do {
-            let handled = try await registry.handle(router: router.wrapped, rawDeepLink: rawDeepLink)
+            let handled = try await registry.handle(router: router, rawDeepLink: rawDeepLink)
             if !handled {
                 logger.warning("Could not handle deep link: \(rawDeepLink)")
             }

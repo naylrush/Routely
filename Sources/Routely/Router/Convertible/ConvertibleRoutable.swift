@@ -8,5 +8,6 @@ public protocol ConvertibleRoutable: Routable, Convertible where Target: Routabl
 
 public protocol ConvertibleRoutableDestination:
     RoutableDestination,
-    ConvertibleRoutable
-where Target: RoutableDestination {}
+    ConvertibleRoutable,
+    WebRoutable
+where Target: RoutableDestination & WebRoutable {}

@@ -13,3 +13,10 @@ public protocol FlowRoutableDestination: FlowRoutable, ConvertibleRoutableDestin
 extension FlowRoutableDestination {
     public var flowPresentationStyle: FlowPresentationStyle { .push }
 }
+
+// WebRoutable
+extension FlowRoutableDestination {
+    public init?(url: URL) {
+        nil
+    }
+}

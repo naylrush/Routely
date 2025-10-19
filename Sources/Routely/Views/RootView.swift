@@ -4,7 +4,9 @@
 
 import SwiftUI
 
-private struct DummyConvertibleRoute<Route: RoutableDestination>: ConvertibleRoutableDestination {
+private struct DummyConvertibleRoute<
+    Route: RoutableDestination & WebRoutable
+>: ConvertibleRoutableDestination, WebRoutable {
     let route: Route
 
     // Convertible
@@ -18,6 +20,15 @@ private struct DummyConvertibleRoute<Route: RoutableDestination>: ConvertibleRou
         route
     }
 
+    // WebRoutable
+    init?(url: URL) {
+        if let route = Route(url: url) {
+            self.route = route
+        } else {
+            return nil
+        }
+    }
+
     // View
     var body: some View {
         route.destination
@@ -28,7 +39,7 @@ private struct DummyConvertibleRoute<Route: RoutableDestination>: ConvertibleRou
     }
 }
 
-public struct RootView<Route: RoutableDestination, Content: View>: View {
+public struct RootView<Route: RoutableDestination & WebRoutable, Content: View>: View {
     private let content: Content
 
     public init(@ViewBuilder content: () -> Content) {
@@ -51,7 +62,7 @@ extension RootView where Content == Route.Destination {
 }
 
 @MainActor
-enum RootViewBuilder<Route: RoutableDestination> {
+enum RootViewBuilder<Route: RoutableDestination & WebRoutable> {
     @ViewBuilder
     static func wrap(
         `if` condition: Bool,

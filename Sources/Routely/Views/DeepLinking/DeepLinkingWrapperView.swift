@@ -5,8 +5,8 @@
 import OSLog
 import SwiftUI
 
-struct DeepLinkingWrapperView<Route: ConvertibleRoutableDestination, Content: View>: View {
-    let router: CompositeConvertibleRouter<Route>
+struct DeepLinkingWrapperView<Route: Routable, Content: View>: View {
+    let router: Router<Route>
 
     @ViewBuilder var content: Content
 

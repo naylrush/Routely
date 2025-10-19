@@ -6,7 +6,7 @@ import OSLog
 import SwiftUI
 
 struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
-    @Environment(CompositeRouter<FlowRoute.Target>.self)
+    @Environment(Router<FlowRoute.Target>.self)
     private var router
 
     @Environment(\.routingResult)

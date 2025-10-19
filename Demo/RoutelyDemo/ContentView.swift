@@ -3,7 +3,11 @@ import Routely
 
 struct ContentView: View {
     var body: some View {
-        FlowRootView(initialRoute: FlowRoute.first)
+        TabView {
+            FlowRootView(initialRoute: FlowRoute.first)
+
+            RootView(initialRoute: Route.root)
+        }
     }
 }
 

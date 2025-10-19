@@ -4,16 +4,16 @@
 
 import SwiftUI
 
-struct RouterConfigurationView<Route: ConvertibleRoutableDestination, Content: View>: View {
-    @Environment(CompositeRouter<Route.Target>.self)
-    private var externalRouter: CompositeRouter?
+struct RouterConfigurationView<ConvertibleRoute: ConvertibleRoutableDestination, Content: View>: View {
+    @Environment(Router<ConvertibleRoute.Target>.self)
+    private var externalRouter: Router?
 
-    @State private var compositeRouter = CompositeConvertibleRouter<Route>()
+    @State private var convertibleRouter = ConvertibleRouter<ConvertibleRoute>()
 
-    @ViewBuilder let content: (CompositeConvertibleRouter<Route>) -> Content
+    @ViewBuilder let content: (ConvertibleRouter<ConvertibleRoute>) -> Content
 
     var body: some View {
-        let router = compositeRouter.wrapped
+        let router = convertibleRouter.wrapped
 
         ExternalRouterConfigurationView(
             externalRouter: externalRouter,
@@ -24,7 +24,7 @@ struct RouterConfigurationView<Route: ConvertibleRoutableDestination, Content: V
                 router: router
             ) {
                 RoutelyActionsConfigurationView(router: router) {
-                    content(compositeRouter)
+                    content(convertibleRouter)
                 }
             }
         }

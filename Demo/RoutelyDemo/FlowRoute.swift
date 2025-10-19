@@ -1,7 +1,7 @@
 import Routely
 import SwiftUI
 
-public enum FlowRoute: FlowRoutable, SelfConvertible {
+enum FlowRoute: FlowRoutable {
     case first
     case second
     case third
@@ -10,7 +10,7 @@ public enum FlowRoute: FlowRoutable, SelfConvertible {
 }
 
 extension FlowRoute: RoutableDestination {
-    public var body: some View {
+    var body: some View {
         switch self {
         case .first: DestinationView(route: .first)
         case .second: DestinationView(route: .second)
@@ -21,8 +21,24 @@ extension FlowRoute: RoutableDestination {
     }
 }
 
+extension FlowRoute: Convertible {
+    typealias Target = Route
+
+    nonisolated init?(_ route: Target) {
+        if case let .flow(flowRoute) = route {
+            self = flowRoute
+        } else {
+            return nil
+        }
+    }
+
+    nonisolated func into() -> Target? {
+        .flow(self)
+    }
+}
+
 extension FlowRoute: FlowRoutableDestination {
-    public var flowPresentationStyle: FlowPresentationStyle {
+    var flowPresentationStyle: FlowPresentationStyle {
         switch self {
         case .first, .second, .fourth, .fifth: .push
         case .third: .present(.sheet())
@@ -40,19 +56,29 @@ private struct DestinationView: View {
     let route: FlowRoute
 
     var body: some View {
-        VStack {
-            Text(String(describing: route))
+        ZStack {
+            Color.white.ignoresSafeArea()
 
+            VStack(spacing: 24) {
+                Text(String(describing: route))
+
+                ActionButton(title: "Next") {
+                    next()
+                }
+            }
+        }
+        .overlay(alignment: .topLeading) {
             Button {
-                next()
+                dismiss()
             } label: {
-                Text("Push Next")
-                    .foregroundStyle(.black)
-                    .padding()
+                Image(systemName: "xmark")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding(8)
                     .background {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.blue)
+                        Circle().fill(Color.black.opacity(0.6))
                     }
+                    .padding(12)
             }
         }
     }
