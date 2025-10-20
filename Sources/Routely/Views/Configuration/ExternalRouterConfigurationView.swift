@@ -12,10 +12,13 @@ struct ExternalRouterConfigurationView<Route: Routable, Content: View>: View {
         router: Router<Route>,
         @ViewBuilder content: () -> Content
     ) {
-        router.onExternalRouterDismiss = { [weak externalRouter] in
+        if let externalRouter {
             precondition(router !== externalRouter, "router and externalRouter should be different")
-            externalRouter?.dismiss()
+            router.onExternalRouterDismiss = {
+                externalRouter.dismiss()
+            }
         }
+
         self.content = content()
     }
 
