@@ -5,7 +5,7 @@
 import Foundation
 import Observation
 
-final class ConvertibleRouter<ConvertibleRoute: ConvertibleRoutableDestination>: Router<ConvertibleRoute> {
+final class ConvertibleRouter<ConvertibleRoute: ConvertibleRoutable>: Router<ConvertibleRoute> {
     let wrapped = Router<ConvertibleRoute.Target>()
 
     override var id: UUID {
