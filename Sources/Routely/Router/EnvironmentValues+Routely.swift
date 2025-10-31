@@ -7,7 +7,7 @@ import SwiftUI
 extension EnvironmentValues {
     @Entry public var dvijDismiss: RoutelyAction<Void> = .dummy
 
-    @Entry public var finishWholeRoute: RoutelyAction<Void> = .dummy
+    @Entry public var finishWholeRoute: FinishWholeRouteAction = .dummy
 
     @Entry public var finishCurrentRoute: RoutelyAction<Void> = .dummy
 

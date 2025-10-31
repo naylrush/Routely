@@ -11,7 +11,7 @@ public final class RoutelyResult: Sendable, Identifiable {
     public typealias Completion<T> = @Sendable @MainActor (T?, Params?) -> Void
 
     public let id = UUID()
-    private let isDummy: Bool
+    public let isDummy: Bool
 
     @MainActor public var value: Value? {
         didSet {

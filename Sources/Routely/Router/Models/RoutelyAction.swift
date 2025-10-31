@@ -55,4 +55,10 @@ extension RoutelyAction<Void> {
     public static let dummy = createDummy()
 }
 
+public typealias FinishWholeRouteAction = RoutelyAction<any Sendable>
+
+extension FinishWholeRouteAction {
+    public static let dummy = createDummy()
+}
+
 private let logger = Logger(subsystem: "Routely", category: "RoutelyAction")

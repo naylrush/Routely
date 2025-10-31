@@ -5,6 +5,9 @@
 import SwiftUI
 
 struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
+    @Environment(\.routingResult)
+    private var routingResult
+
     @Environment(\.finishWholeRoute)
     private var finishWholeRoute
 
@@ -16,7 +19,17 @@ struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
             router.dismiss()
         }
 
-        let finishWholeRoute = finishWholeRoute.isDummy ? dismiss : finishWholeRoute
+        let finishWholeRoute = FinishWholeRouteAction { [finishWholeRoute, routingResult, dismiss] value in
+            if !finishWholeRoute.isDummy {
+                finishWholeRoute(value)
+                return
+            }
+
+            if !routingResult.isDummy {
+                routingResult.value = value
+            }
+            dismiss()
+        }
 
         let finishCurrentRoute = RoutelyAction {
             router.externalRouterDismiss()
