@@ -5,9 +5,10 @@
 import Foundation
 import OSLog
 
-public final class RoutelyResult: Sendable {
+public final class RoutelyResult: Sendable, Identifiable {
     public typealias Value = (any Sendable)
-    public typealias Completion<T> = @Sendable @MainActor (T?) -> Void
+    public typealias Params = [String: Value]
+    public typealias Completion<T> = @Sendable @MainActor (T?, Params?) -> Void
 
     public let id = UUID()
     private let isDummy: Bool
@@ -22,11 +23,13 @@ public final class RoutelyResult: Sendable {
         }
     }
 
+    @MainActor public private(set) var params: Params?
+
     private let completion: Completion<Value>
 
     public init<T>(completion: @escaping Completion<T>) {
         self.isDummy = false
-        self.completion = { [logger] anyValue in
+        self.completion = { [logger] anyValue, params in
             let value: T? = {
                 switch anyValue {
                 case let value as T?:
@@ -39,21 +42,34 @@ public final class RoutelyResult: Sendable {
             }()
 
             Task { @MainActor in
-                completion(value)
+                completion(value, params)
             }
         }
     }
 
     private init() {
         self.isDummy = true
-        self.completion = { _ in
+        self.completion = { _, _ in
             logger.warning("Calling completion dummy RoutelyResult")
         }
     }
 
     @MainActor
     public func complete() {
-        completion(value)
+        completion(value, params)
+    }
+
+    @MainActor
+    public subscript(_ key: String) -> Value? {
+        get {
+            params?[key]
+        }
+        set {
+            if params == nil {
+                params = [:]
+            }
+            params?[key] = newValue
+        }
     }
 }
 

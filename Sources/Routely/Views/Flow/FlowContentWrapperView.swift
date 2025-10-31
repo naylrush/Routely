@@ -38,19 +38,21 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
         }
 
         let nextFlowRoute = FlowRoute.allCases[nextIndex]
-        goTo(nextFlowRoute)
+
+        switch route.flowPresentationStyle {
+        case .push:
+            goTo(nextFlowRoute)
+
+        case .present:
+            // Parent will show next route
+            routingResult[Keys.nextFlowRoute.rawValue] = nextFlowRoute
+            finishCurrentRoute()
+        }
     }
 
-    private func goTo(_ nextFlowRoute: FlowRoute?) {
-        guard let nextFlowRoute else { return }
+    private func goTo(_ nextFlowRoute: FlowRoute) {
         guard let nextRoute = nextFlowRoute.into() else {
             logger.fault("Target convertion failed")
-            return
-        }
-
-        if case .present = route.flowPresentationStyle {
-            routingResult.value = nextFlowRoute
-            finishCurrentRoute()
             return
         }
 
@@ -59,13 +61,28 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
             router.push(nextRoute)
 
         case let .present(style):
-            router.present(style: style, nextRoute, completion: goTo)
+            router.present(style: style, nextRoute, completion: onPresentationComplete)
         }
 
         logger.debug(
             "\(nextFlowRoute.flowPresentationStyle) next route: \(String(describing: nextRoute))"
         )
     }
+
+    private func onPresentationComplete(
+        _ routingResultValue: RoutelyResult.Value?,
+        params: RoutelyResult.Params?
+    ) {
+        // Proxy
+        routingResult.value = routingResultValue
+
+        guard let nextFlowRoute = params?[Keys.nextFlowRoute.rawValue] as? FlowRoute else { return }
+        goTo(nextFlowRoute)
+    }
+}
+
+private enum Keys: String {
+    case nextFlowRoute
 }
 
 private let logger = Logger(subsystem: "Routely", category: "FlowContentWrapperView")

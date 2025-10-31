@@ -64,6 +64,17 @@ public class Router<Route: Routable>: Routing {
         _ route: Route,
         completion: @escaping @MainActor (T?) -> Void
     ) {
+        let result = RoutelyResult { (value: T?, _) in
+            completion(value)
+        }
+        present(style: style, route, result: result)
+    }
+
+    public func present<T>(
+        style: PresentationStyle,
+        _ route: Route,
+        completion: @escaping @MainActor (T?, RoutelyResult.Params?) -> Void
+    ) {
         let result = RoutelyResult(completion: completion)
         present(style: style, route, result: result)
     }
