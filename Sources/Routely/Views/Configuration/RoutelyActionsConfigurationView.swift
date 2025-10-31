@@ -9,7 +9,7 @@ struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
     private var routingResult
 
     @Environment(\.finishWholeRoute)
-    private var finishWholeRoute
+    private var externalFinishWholeRoute
 
     let router: Router<Route>
     @ViewBuilder let content: Content
@@ -19,9 +19,9 @@ struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
             router.dismiss()
         }
 
-        let finishWholeRoute = FinishWholeRouteAction { [finishWholeRoute, routingResult, dismiss] value in
-            if !finishWholeRoute.isDummy {
-                finishWholeRoute(value)
+        let finishWholeRoute = FinishWholeRouteAction { value in
+            if !externalFinishWholeRoute.isDummy {
+                externalFinishWholeRoute(value)
                 return
             }
 
