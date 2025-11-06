@@ -18,7 +18,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.62.2"),
-        .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.6.0"),
+        .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.7.0"),
     ],
     targets: [
         .target(

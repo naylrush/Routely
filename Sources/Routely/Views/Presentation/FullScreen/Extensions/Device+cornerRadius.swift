@@ -9,7 +9,9 @@ extension Device {
     // Info from https://www.screensizes.app
     var cornerRadius: CGFloat {
         switch self {
-        case .iPhone16Pro, .iPhone16ProMax: 62
+        case .iPhoneAir,
+             .iPhone17, .iPhone17Pro, .iPhone17ProMax,
+             .iPhone16Pro, .iPhone16ProMax: 62
 
         case .iPhone16, .iPhone16Plus,
              .iPhone15, .iPhone15Plus, .iPhone15Pro, .iPhone15ProMax,
