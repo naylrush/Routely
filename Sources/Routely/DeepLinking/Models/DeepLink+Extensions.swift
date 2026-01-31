@@ -11,7 +11,7 @@ extension DeepLink {
     }
 
     @MainActor public var asUniversalLink: URL? {
-        let path = "\(DeepLinkingConfiguration.shared.httpScheme)://\(DeepLinkingConfiguration.shared.urlHost)/\(path)"
+        let path = "https://\(DeepLinkingConfiguration.shared.mainUrlHost)/\(path)"
         return URL(string: path)
     }
 }

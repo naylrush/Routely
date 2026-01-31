@@ -49,7 +49,9 @@ struct DeepLinkingView<ConvertibleRoute: ConvertibleRoutable, Content: View>: Vi
 
         do {
             let handled = try await registry.handle(router: router.wrapped, rawDeepLink: rawDeepLink)
-            if !handled {
+            if handled {
+                logger.debug("Handled deep link: \(rawDeepLink)")
+            } else {
                 logger.warning("Could not handle deep link: \(rawDeepLink)")
             }
         } catch {

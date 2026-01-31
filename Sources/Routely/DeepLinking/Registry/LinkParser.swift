@@ -33,16 +33,21 @@ enum LinkParser {
     }
 
     static func parseUniversalLink(url: URL) -> RawDeepLink? {
-        guard url.isHttpScheme, url.host() == DeepLinkingConfiguration.shared.urlHost else {
+        guard
+            url.isHttpsScheme,
+            let host = url.host(),
+            DeepLinkingConfiguration.shared.urlHosts.contains(host)
+        else {
             return nil
         }
+
         let path = url.sanitizingPath()
         return RawDeepLink(path: path)
     }
 }
 
 extension URL {
-    fileprivate var isHttpScheme: Bool {
-        ["http", "https"].contains(scheme)
+    fileprivate var isHttpsScheme: Bool {
+        scheme == "https"
     }
 }

@@ -12,17 +12,18 @@ public struct DeepLinkingConfiguration {
 
     public private(set) static var isEnabled = false
 
-    let urlHost: String
-    let httpScheme: String
+    var mainUrlHost: String {
+        urlHosts[0]
+    }
+
     let appScheme: String
+    let urlHosts: [String]
 
     public init(
-        urlHost: String,
-        httpScheme: String = "https",
-        appScheme: String
+        appScheme: String,
+        urlHosts: [String]
     ) {
-        self.urlHost = urlHost
-        self.httpScheme = httpScheme
         self.appScheme = appScheme
+        self.urlHosts = urlHosts
     }
 }
