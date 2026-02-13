@@ -13,7 +13,7 @@ struct OpenURLOverridingView<Route: WebRoutable, Content: View>: View {
 
     private var openUrlAction: OpenURLAction {
         OpenURLAction { url in
-            if let webRoute = Route(url: url) {
+            if url.isWebUrl, let webRoute = Route(url: url) {
                 router.present(style: .sheet(), webRoute)
             } else {
                 externalOpenUrl(url)
@@ -25,5 +25,11 @@ struct OpenURLOverridingView<Route: WebRoutable, Content: View>: View {
     var body: some View {
         content
             .environment(\.openURL, openUrlAction)
+    }
+}
+
+extension URL {
+    fileprivate var isWebUrl: Bool {
+        ["http", "https"].contains(scheme?.lowercased())
     }
 }
