@@ -20,14 +20,15 @@ struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
         }
 
         let finishWholeRoute = FinishWholeRouteAction { value in
+            if !routingResult.isDummy {
+                routingResult.value = value
+            }
+
             if !externalFinishWholeRoute.isDummy {
                 externalFinishWholeRoute(value)
                 return
             }
 
-            if !routingResult.isDummy {
-                routingResult.value = value
-            }
             dismiss()
         }
 
