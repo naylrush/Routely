@@ -73,8 +73,10 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
         _ routingResultValue: RoutelyResult.Value?,
         params: RoutelyResult.Params?
     ) {
-        // Proxy
-        routingResult.value = routingResultValue
+        if let routingResultValue {
+            // Proxy
+            routingResult.value = routingResultValue
+        }
 
         guard let nextFlowRoute = params?[Keys.nextFlowRoute.rawValue] as? FlowRoute else { return }
         goTo(nextFlowRoute)
