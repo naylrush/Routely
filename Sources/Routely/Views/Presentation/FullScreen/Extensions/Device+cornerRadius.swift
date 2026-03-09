@@ -21,7 +21,8 @@ extension Device {
              .iPhone13ProMax,
              .iPhone12ProMax: 53
 
-        case .iPhone16e,
+        case .iPhone17e,
+             .iPhone16e,
              .iPhone14,
              .iPhone13, .iPhone13Pro,
              .iPhone12, .iPhone12Pro: 47
