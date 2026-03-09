@@ -2,53 +2,143 @@ import Routely
 import SwiftUI
 
 enum CreationRoute: Routable {
-    case form
-    case details
-    case settings
-    case preview
+    case root
+    case flow(CreationFlowRoute)
 }
 
-extension CreationRoute: Convertible {
-    typealias Target = Route
-
-    nonisolated init?(_ route: Target) {
-        if case let .creation(r) = route { self = r } else { return nil }
-    }
-
-    nonisolated func into() -> Target? { .creation(self) }
+enum CreationFlowRoute: FlowRoutable {
+    case form
+    case details
+    case confirm
 }
 
 extension CreationRoute: RoutableDestination {
     var body: some View {
         switch self {
-        case .form: CreationFormView()
-        case .details: CreationDetailsView()
-        case .settings: CreationSettingsView()
-        case .preview: CreationPreviewView()
+        case .root: FlowRootView(initialRoute: CreationFlowRoute.form)
+        case .flow(let route): route.body
+        }
+    }
+
+    var wrapToRootView: Bool {
+        switch self {
+        case .root: false
+        case let .flow(route): route.wrapToRootView
         }
     }
 }
 
-// MARK: - Views
+extension CreationFlowRoute: RoutableDestination {
+    var body: some View {
+        CreationFlowStepView(route: self)
+    }
+}
 
-private struct CreationFormView: View {
-    @Environment(RouterImpl.self)
-    private var router
+extension CreationFlowRoute: FlowRoutableDestination {
+    var flowPresentationStyle: FlowPresentationStyle {
+        switch self {
+        case .form, .details: .push
+        case .confirm: .present(.sheet())
+        }
+    }
+}
+
+extension CreationFlowRoute: Convertible {
+    nonisolated init?(_ route: Route) {
+        if case .creation(.flow(let flowRoute)) = route {
+            self = flowRoute
+        } else {
+            return nil
+        }
+    }
+
+    nonisolated func into() -> Target? {
+        .creation(.flow(self))
+    }
+}
+
+extension CreationFlowRoute {
+    var stepNumber: Int {
+        switch self {
+        case .form: 1
+        case .details: 2
+        case .confirm: 3
+        }
+    }
+
+    var showCloseButton: Bool { self == .form || self == .confirm }
+    var isLast: Bool { self == .confirm }
+
+    var stepTitle: String {
+        switch self {
+        case .form: "Create"
+        case .details: "Details"
+        case .confirm: "Confirm"
+        }
+    }
+
+    var stepDescription: String {
+        switch self {
+        case .form: "Start with a name"
+        case .details: "Add a short description"
+        case .confirm: "Final sheet step"
+        }
+    }
+
+    var buttonTitle: String {
+        switch self {
+        case .confirm: "Publish"
+        default: "Next"
+        }
+    }
+
+    var accentColor: Color {
+        switch self {
+        case .form: .orange
+        case .details: .blue
+        case .confirm: .green
+        }
+    }
+}
+
+// MARK: - View
+
+private struct CreationFlowStepView: View {
+    @Environment(\.next)
+    private var next
+
+    @Environment(\.finishWholeRoute)
+    private var finishWholeRoute
 
     @Environment(\.dvijDismiss)
     private var dismiss
 
+    let route: CreationFlowRoute
+
+    private var accentColor: Color { route.accentColor }
+
     var body: some View {
-        CreationStepLayout(
-            title: "New Item",
-            subtitle: "Step 1 of 2 — Basic Info",
-            buttonTitle: "Continue"
-        ) {
-            router.push(.creation(.details))
+        ZStack {
+            accentColor
+                .opacity(0.08)
+                .ignoresSafeArea()
+
+            VStack(spacing: 24) {
+                Header
+
+                Spacer()
+
+                Progress
+
+                Spacer()
+
+                Actions
+            }
+            .padding(24)
         }
-        .navigationTitle("")
+        .presentationDetents([.medium])
         .toolbar {
-            if #available(iOS 26, *) {
+            if #available(iOS 26, *), route.showCloseButton {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
                         dismiss()
@@ -58,125 +148,51 @@ private struct CreationFormView: View {
                 }
             }
         }
-        .overlay(alignment: .topLeading) {
-            if #unavailable(iOS 26) {
-                DismissButton(action: dismiss)
+        .overlay(alignment: .topTrailing) {
+            if #unavailable(iOS 26), route.showCloseButton {
+                Button("Cancel") { dismiss() }
+                    .font(.body)
+                    .padding()
             }
         }
     }
-}
 
-private struct CreationDetailsView: View {
-    @Environment(RouterImpl.self)
-    private var router
-
-    var body: some View {
-        CreationStepLayout(
-            title: "Details",
-            subtitle: "Step 2 of 2 — Details",
-            buttonTitle: "Continue"
-        ) {
-            router.push(.creation(.settings))
-        }
-    }
-}
-
-private struct CreationSettingsView: View {
-    @Environment(RouterImpl.self)
-    private var router
-
-    var body: some View {
-        CreationStepLayout(
-            title: "Settings",
-            subtitle: "Final Step — Settings",
-            buttonTitle: "Preview"
-        ) {
-            router.present(style: .sheet(), .creation(.preview))
-        }
-    }
-}
-
-private struct CreationStepLayout: View {
-    let title: String
-    let subtitle: String
-    let buttonTitle: String
-    let action: @MainActor () -> Void
-
-    var body: some View {
-        ZStack {
-            Color(.systemGroupedBackground)
-                .ignoresSafeArea()
-
-            VStack(spacing: 32) {
-                VStack(spacing: 8) {
-                    Text(title)
-                        .font(.largeTitle.weight(.bold))
-
-                    Text(subtitle)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-
-                ActionButton(title: buttonTitle, action: action)
-            }
-        }
-    }
-}
-
-private struct CreationPreviewView: View {
-    @Environment(\.finishWholeRoute)
-    private var finishWholeRoute
-
-    @Environment(\.dvijDismiss)
-    private var dismiss
-
-    var body: some View {
-        VStack(spacing: 32) {
-            VStack(spacing: 8) {
-                Image(systemName: "checkmark.circle")
-                    .font(.system(size: 56))
-                    .foregroundStyle(.blue)
-
-                Text("Preview")
-                    .font(.title.weight(.bold))
-
-                Text("Ready to publish your item?")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-
-            VStack(spacing: 12) {
-                ActionButton(title: "Publish") {
-                    finishWholeRoute(true)
-                }
-
-                Button("Edit") {
-                    dismiss()
-                }
+    private var Header: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Create Item")
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(.secondary)
-            }
-            .padding(.bottom, 32)
+                .textCase(.uppercase)
+
+            Text(route.stepTitle)
+                .font(.largeTitle.weight(.bold))
+
+            Text(route.stepDescription)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity)
-        .presentationDetents([.medium, .large])
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
-}
 
-// MARK: - Shared
+    private var Progress: some View {
+        HStack(spacing: 12) {
+            ForEach(1...3, id: \.self) { step in
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(step <= route.stepNumber ? accentColor : Color(.systemGray5))
+                    .frame(height: 4)
+            }
+        }
+    }
 
-private struct DismissButton: View {
-    let action: RoutelyAction<Void>
-
-    var body: some View {
-        Button {
-            action()
-        } label: {
-            Image(systemName: "xmark")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(.white)
-                .padding(8)
-                .background(Circle().fill(Color.black.opacity(0.6)))
-                .padding(12)
+    private var Actions: some View {
+        VStack(spacing: 12) {
+            ActionButton(title: route.buttonTitle) {
+                if route.isLast {
+                    finishWholeRoute(true)
+                } else {
+                    next()
+                }
+            }
         }
     }
 }

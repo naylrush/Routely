@@ -10,7 +10,6 @@ enum Route: Routable {
     case creation(CreationRoute)
     case resultsDemo
     case results(ResultsRoute)
-    case flow(FlowRoute)
     case web(URL)
 }
 
@@ -29,16 +28,14 @@ extension Route: RoutableDestination {
         case let .creation(route): route.body
         case .resultsDemo: ResultsDemoView()
         case let .results(route): route.body
-        case let .flow(route): route.body
         case let .web(url): SafariView(url: url)
         }
     }
-}
 
-extension Route {
     var wrapToRootView: Bool {
         switch self {
-        case .flow: false
+        case let .creation(route): route.wrapToRootView
+        case let .results(route): route.wrapToRootView
         default: true
         }
     }
@@ -118,33 +115,73 @@ private struct CreationDemoView: View {
     @Environment(RouterImpl.self)
     private var router
 
+    @State private var successResult: Bool??
+
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(alignment: .center, spacing: 24) {
             VStack(spacing: 8) {
-                Text("Sheet + Navigation")
+                Text("Create New Item")
                     .font(.title.weight(.bold))
                     .multilineTextAlignment(.center)
-                Text("sheet → push → push → sheet → publish")
+                Text("Flow-based wizard with sheet presentation")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
 
-            ActionButton(title: "Create New Item") {
-                router.present(
-                    style: .sheet(.requiresConfirmation(Appearance.exitConfirmation)),
-                    .creation(.form)
+            ActionButton(title: "Start Creation Flow") {
+                let config = ConfirmationDialogConfiguration(
+                    confirmActionTitle: "Discard"
                 )
+                router.present(
+                    style: .sheet(.requiresConfirmation(config)),
+                    .creation(.root)
+                ) { (success: Bool?) in
+                    successResult = success
+                }
             }
+
+            ResultText
         }
         .padding(.horizontal, 32)
     }
-}
 
-private enum Appearance {
-    static let exitConfirmation = ConfirmationDialogConfiguration(
-        confirmActionTitle: "Discard changes"
-    )
+    @ViewBuilder private var ResultText: some View {
+        switch successResult {
+        case nil:
+            Text("Result: Not finished yet")
+                .font(.subheadline)
+                .foregroundStyle(.tertiary)
+
+        case .some(nil):
+            HStack(spacing: 10) {
+                Image(systemName: "xmark.circle")
+                    .foregroundStyle(.secondary)
+                Text("Result: Cancelled")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+
+        case .some(.some(let success)):
+            HStack(spacing: 10) {
+                Image(systemName: success ? "checkmark.circle.fill" : "tray.and.arrow.down")
+                    .foregroundStyle(success ? .green : .orange)
+                Text(success ? "Result: Published" : "Result: Saved as draft")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+    }
 }
 
 // MARK: - Results Demo
@@ -168,7 +205,7 @@ private struct ResultsDemoView: View {
                     .multilineTextAlignment(.center)
             }
 
-            resultCard
+            ResultCard
 
             ActionButton(title: "Pick Theme") {
                 router.present(
@@ -187,7 +224,7 @@ private struct ResultsDemoView: View {
         .padding(.horizontal, 32)
     }
 
-    @ViewBuilder private var resultCard: some View {
+    @ViewBuilder private var ResultCard: some View {
         if let theme = selectedTheme {
             HStack(spacing: 14) {
                 ZStack {
