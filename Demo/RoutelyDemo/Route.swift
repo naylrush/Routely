@@ -8,6 +8,8 @@ enum Route: Routable {
     case stackDetail(Int)
     case creationDemo
     case creation(CreationRoute)
+    case resultsDemo
+    case results(ResultsRoute)
     case flow(FlowRoute)
     case web(URL)
 }
@@ -25,6 +27,8 @@ extension Route: RoutableDestination {
         case let .stackDetail(level): StackDetailView(level: level)
         case .creationDemo: CreationDemoView()
         case let .creation(route): route.body
+        case .resultsDemo: ResultsDemoView()
+        case let .results(route): route.body
         case let .flow(route): route.body
         case let .web(url): SafariView(url: url)
         }
@@ -141,4 +145,92 @@ private enum Appearance {
     static let exitConfirmation = ConfirmationDialogConfiguration(
         confirmActionTitle: "Discard changes"
     )
+}
+
+// MARK: - Results Demo
+
+private struct ResultsDemoView: View {
+    @Environment(RouterImpl.self)
+    private var router
+
+    @State private var selectedTheme: ThemeColor?
+    @State private var wasCancelled = false
+
+    var body: some View {
+        VStack(spacing: 32) {
+            VStack(spacing: 8) {
+                Text("Result Handling")
+                    .font(.title.weight(.bold))
+                Text("present(style:route:completion:)")
+                    .font(.caption)
+                    .fontDesign(.monospaced)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+
+            resultCard
+
+            ActionButton(title: "Pick Theme") {
+                router.present(
+                    style: .sheet(),
+                    .results(.picker)
+                ) { (theme: ThemeColor?) in
+                    if let theme {
+                        selectedTheme = theme
+                        wasCancelled = false
+                    } else {
+                        wasCancelled = true
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 32)
+    }
+
+    @ViewBuilder private var resultCard: some View {
+        if let theme = selectedTheme {
+            HStack(spacing: 14) {
+                ZStack {
+                    Circle()
+                        .fill(theme.color.opacity(0.15))
+                        .frame(width: 48, height: 48)
+                    Image(systemName: theme.icon)
+                        .font(.title2)
+                        .foregroundStyle(theme.color)
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Applied Theme")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(theme.rawValue)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(theme.color)
+                }
+                Spacer()
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .background(theme.color.opacity(0.06))
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(theme.color.opacity(0.2), lineWidth: 1)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+        } else {
+            HStack(spacing: 12) {
+                Image(systemName: wasCancelled ? "xmark.circle" : "circle.dashed")
+                    .foregroundStyle(wasCancelled ? .secondary : .tertiary)
+                Text(wasCancelled ? "Cancelled — result is nil" : "No theme selected yet")
+                    .font(.subheadline)
+                    .foregroundStyle(wasCancelled ? .secondary : .tertiary)
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+        }
+    }
 }

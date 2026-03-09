@@ -10,6 +10,9 @@ struct ContentView: View {
             RootView(initialRoute: Route.creationDemo)
                 .tabItem { Label("Creation", systemImage: "plus.circle") }
 
+            RootView(initialRoute: Route.resultsDemo)
+                .tabItem { Label("Results", systemImage: "checkmark.circle") }
+
             FlowRootView(initialRoute: FlowRoute.first)
                 .tabItem { Label("Flow", systemImage: "arrow.right.circle") }
         }
