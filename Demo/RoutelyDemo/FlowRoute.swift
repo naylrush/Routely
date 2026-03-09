@@ -58,9 +58,14 @@ extension FlowRoute {
 // MARK: - View
 
 private struct FlowStepView: View {
-    @Environment(RouterImpl.self) private var router
-    @Environment(\.next) private var next
-    @Environment(\.dvijDismiss) private var dismiss
+    @Environment(RouterImpl.self)
+    private var router
+
+    @Environment(\.next)
+    private var next
+
+    @Environment(\.dvijDismiss)
+    private var dismiss
 
     let route: FlowRoute
 
@@ -90,7 +95,7 @@ private struct FlowStepView: View {
                     Text("of 5")
                         .font(.title2.weight(.semibold))
                 }
-                
+
                 if route.isSheet {
                     Label("Presented as sheet", systemImage: "rectangle.bottomthird.inset.filled")
                         .font(.caption)

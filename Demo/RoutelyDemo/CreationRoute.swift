@@ -32,8 +32,11 @@ extension CreationRoute: RoutableDestination {
 // MARK: - Views
 
 private struct CreationFormView: View {
-    @Environment(RouterImpl.self) private var router
-    @Environment(\.dvijDismiss) private var dismiss
+    @Environment(RouterImpl.self)
+    private var router
+
+    @Environment(\.dvijDismiss)
+    private var dismiss
 
     var body: some View {
         CreationStepLayout(
@@ -64,7 +67,8 @@ private struct CreationFormView: View {
 }
 
 private struct CreationDetailsView: View {
-    @Environment(RouterImpl.self) private var router
+    @Environment(RouterImpl.self)
+    private var router
 
     var body: some View {
         CreationStepLayout(
@@ -78,7 +82,8 @@ private struct CreationDetailsView: View {
 }
 
 private struct CreationSettingsView: View {
-    @Environment(RouterImpl.self) private var router
+    @Environment(RouterImpl.self)
+    private var router
 
     var body: some View {
         CreationStepLayout(
@@ -119,8 +124,11 @@ private struct CreationStepLayout: View {
 }
 
 private struct CreationPreviewView: View {
-    @Environment(\.finishWholeRoute) private var finishWholeRoute
-    @Environment(\.dvijDismiss) private var dismiss
+    @Environment(\.finishWholeRoute)
+    private var finishWholeRoute
+
+    @Environment(\.dvijDismiss)
+    private var dismiss
 
     var body: some View {
         VStack(spacing: 32) {

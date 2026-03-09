@@ -43,7 +43,8 @@ extension Route {
 // MARK: - Stack Demo
 
 private struct StackDemoView: View {
-    @Environment(RouterImpl.self) private var router
+    @Environment(RouterImpl.self)
+    private var router
 
     var body: some View {
         VStack(spacing: 24) {
@@ -63,7 +64,8 @@ private struct StackDemoView: View {
 }
 
 private struct StackDetailView: View {
-    @Environment(RouterImpl.self) private var router
+    @Environment(RouterImpl.self)
+    private var router
 
     let level: Int
 
@@ -109,7 +111,8 @@ private struct StackDetailView: View {
 // MARK: - Creation Demo
 
 private struct CreationDemoView: View {
-    @Environment(RouterImpl.self) private var router
+    @Environment(RouterImpl.self)
+    private var router
 
     var body: some View {
         VStack(spacing: 24) {

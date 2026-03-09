@@ -14,6 +14,7 @@ extension PresentationStyle {
         switch (self, other) {
         case (.fullScreen, .fullScreen),
              (.sheet, .sheet): true
+
         default: false
         }
     }
