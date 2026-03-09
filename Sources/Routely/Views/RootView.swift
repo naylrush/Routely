@@ -21,7 +21,7 @@ private struct DummyConvertibleRoute<
     }
 
     // WebRoutable
-    init?(url: URL) {
+    nonisolated init?(url: URL) {
         if let route = Route(url: url) {
             self.route = route
         } else {

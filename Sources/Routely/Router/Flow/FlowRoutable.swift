@@ -16,7 +16,7 @@ extension FlowRoutableDestination {
 
 // WebRoutable
 extension FlowRoutableDestination {
-    public init?(url: URL) {
+    nonisolated public init?(url: URL) {
         nil
     }
 }

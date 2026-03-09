@@ -13,7 +13,7 @@ private struct PreviewConvertibleRoute<
         self.route = route
     }
 
-    init?(url: URL) {
+    nonisolated init?(url: URL) {
         if let route = Route(url: url) {
             self.route = route
         } else {
