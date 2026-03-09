@@ -10,6 +10,7 @@ enum Route: Routable {
     case creation(CreationRoute)
     case resultsDemo
     case results(ResultsRoute)
+    case webDemo
     case web(URL)
 }
 
@@ -28,6 +29,7 @@ extension Route: RoutableDestination {
         case let .creation(route): route.body
         case .resultsDemo: ResultsDemoView()
         case let .results(route): route.body
+        case .webDemo: WebDemoView()
         case let .web(url): SafariView(url: url)
         }
     }
@@ -268,6 +270,43 @@ private struct ResultsDemoView: View {
             .padding(.vertical, 16)
             .background(Color(.secondarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 14))
+        }
+    }
+}
+
+// MARK: - Web Demo
+
+private struct WebDemoView: View {
+    @Environment(RouterImpl.self)
+    private var router
+
+    // swiftlint:disable:next force_unwrapping
+    private let swiftUIDocsURL = URL(string: "https://developer.apple.com/documentation/swiftui")!
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Header
+
+            VStack(spacing: 12) {
+                ActionButton(title: "SwiftUI Documentation") {
+                    router.present(
+                        style: .sheet(),
+                        .web(swiftUIDocsURL)
+                    )
+                }
+            }
+        }
+        .padding(.horizontal, 32)
+    }
+
+    private var Header: some View {
+        VStack(spacing: 8) {
+            Text("Present Web")
+                .font(.title.weight(.bold))
+            Text("present(style: .sheet(), route:)")
+                .font(.caption)
+                .fontDesign(.monospaced)
+                .foregroundStyle(.secondary)
         }
     }
 }

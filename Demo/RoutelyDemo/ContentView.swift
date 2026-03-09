@@ -12,6 +12,9 @@ struct ContentView: View {
 
             RootView(initialRoute: Route.resultsDemo)
                 .tabItem { Label("Results", systemImage: "checkmark.circle") }
+
+            RootView(initialRoute: Route.webDemo)
+                .tabItem { Label("Web", systemImage: "globe") }
         }
     }
 }
