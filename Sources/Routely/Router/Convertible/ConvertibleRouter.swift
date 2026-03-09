@@ -4,9 +4,10 @@
 
 import Foundation
 import Observation
+import OSLog
 
 final class ConvertibleRouter<ConvertibleRoute: ConvertibleRoutable>: Router<ConvertibleRoute> {
-    let wrapped = Router<ConvertibleRoute.Target>()
+    let wrapped = Router<ConvertibleRoute.Target>(shouldLogInit: false)
 
     override var id: UUID {
         wrapped.id
@@ -17,3 +18,5 @@ final class ConvertibleRouter<ConvertibleRoute: ConvertibleRoutable>: Router<Con
         set { wrapped.state = newValue.into() }
     }
 }
+
+private let logger = Logger(subsystem: "Routely", category: "CompositeRouter")

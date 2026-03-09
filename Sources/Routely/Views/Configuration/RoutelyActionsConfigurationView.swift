@@ -2,6 +2,7 @@
 // Copyright © 2025 Движ
 //
 
+import OSLog
 import SwiftUI
 
 struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
@@ -15,11 +16,11 @@ struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        let dismiss = RoutelyAction {
+        let dismiss = RoutelyAction("dismiss") {
             router.dismiss()
         }
 
-        let finishWholeRoute = FinishWholeRouteAction { value in
+        let finishWholeRoute = FinishWholeRouteAction("finishWholeRoute") { value in
             if !routingResult.isDummy {
                 routingResult.value = value
             }
@@ -29,10 +30,10 @@ struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
                 return
             }
 
-            dismiss()
+            dismiss(shouldLog: value is Void)
         }
 
-        let finishCurrentRoute = RoutelyAction {
+        let finishCurrentRoute = RoutelyAction("finishCurrentRoute") {
             router.externalRouterDismiss()
         }
 
@@ -42,3 +43,5 @@ struct RoutelyActionsConfigurationView<Route: Routable, Content: View>: View {
             .environment(\.finishCurrentRoute, finishCurrentRoute)
     }
 }
+
+private let logger = Logger(subsystem: "Routely", category: "RoutelyActionsConfigurationView")

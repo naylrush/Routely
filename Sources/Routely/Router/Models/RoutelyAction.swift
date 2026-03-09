@@ -9,33 +9,42 @@ public struct RoutelyAction<T>: Sendable {
     public typealias Action = @MainActor (T) -> Void
 
     private let id = UUID()
+    private let label: String
+
     public let isDummy: Bool
 
     private let action: Action
 
-    public init(action: @escaping Action) {
+    public init(
+        _ label: String = "",
+        action: @escaping Action
+    ) {
+        self.label = label
         self.isDummy = false
         self.action = action
     }
 
     private init() {
+        self.label = ""
         self.isDummy = true
-        self.action = { _ in
-            logger.error("Dummy routing action is called")
+        self.action = { [label, id] _ in
+            logger.error("[\(id)] Dummy routing action is called")
         }
     }
 
     @MainActor
-    public func callAsFunction(_ value: T) {
-        logger.debug("Did call routing action with value: \(String(describing: value))")
+    public func callAsFunction(_ value: T, shouldLog: Bool = true) {
+        if shouldLog {
+            logger.debug("[\(self.id)][\(self.label)] Did call routing action with value: \(String(describing: value))")
+        }
         action(value)
     }
 }
 
 extension RoutelyAction<Void> {
     @MainActor
-    public func callAsFunction() {
-        callAsFunction(())
+    public func callAsFunction(shouldLog: Bool = true) {
+        callAsFunction((), shouldLog: shouldLog)
     }
 }
 

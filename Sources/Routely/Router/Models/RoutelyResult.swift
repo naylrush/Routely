@@ -16,9 +16,9 @@ public final class RoutelyResult: Sendable, Identifiable {
     @MainActor public var value: Value? {
         didSet {
             if isDummy {
-                logger.warning("Setting value to dummy RoutelyResult")
+                logger.warning("Setting result to dummy RoutelyResult")
             } else {
-                logger.debug("[\(self.id)] Did set value: \(self.value.debugDescription)")
+                logger.debug("[\(self.id)] Did set result: \(self.value.map { String(describing: $0) } ?? "nil")")
             }
         }
     }
@@ -49,13 +49,17 @@ public final class RoutelyResult: Sendable, Identifiable {
 
     private init() {
         self.isDummy = true
-        self.completion = { _, _ in
-            logger.warning("Calling completion dummy RoutelyResult")
+        self.completion = { [id] _, _ in
+            logger.warning("[\(id)] Calling completion dummy RoutelyResult")
         }
     }
 
     @MainActor
     public func complete() {
+        logger.debug(
+            // swiftlint:disable:next line_length
+            "[\(self.id)] Completing with result: \(self.value.map { String(describing: $0) } ?? "nil"), params: \(self.params.map { String(describing: $0) } ?? "nil")"
+        )
         completion(value, params)
     }
 

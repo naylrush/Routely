@@ -19,21 +19,21 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
 
     var body: some View {
         route.destination
-            .environment(\.next, .init(action: goToNext))
+            .environment(\.next, .init("next", action: goToNext))
     }
 
     private func goToNext() {
-        logger.debug("Going to next route, currentRoute: \(String(describing: route))")
+        log("Going to next route in style \(route.flowPresentationStyle), currentRoute: \(String(describing: route))")
 
         let allCases = FlowRoute.allCases
         guard let index = allCases.firstIndex(of: route) else {
-            logger.fault("Index of currentRoute not found")
+            log(level: .fault, "Index of currentRoute not found")
             return
         }
 
         let nextIndex = allCases.index(after: index)
         guard nextIndex != allCases.endIndex else {
-            logger.fault("Next index is out of bounds")
+            log(level: .fault, "Next index is out of bounds")
             return
         }
 
@@ -52,7 +52,7 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
 
     private func goTo(_ nextFlowRoute: FlowRoute) {
         guard let nextRoute = nextFlowRoute.into() else {
-            logger.fault("Target convertion failed")
+            log(level: .fault, "Target convertion failed")
             return
         }
 
@@ -63,10 +63,6 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
         case let .present(style):
             router.present(style: style, nextRoute, completion: onPresentationComplete)
         }
-
-        logger.debug(
-            "\(nextFlowRoute.flowPresentationStyle) next route: \(String(describing: nextRoute))"
-        )
     }
 
     private func onPresentationComplete(
@@ -80,6 +76,10 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
 
         guard let nextFlowRoute = params?[Keys.nextFlowRoute.rawValue] as? FlowRoute else { return }
         goTo(nextFlowRoute)
+    }
+
+    nonisolated private func log(level: OSLogType = .debug, _ message: String) {
+        logger.log(level: level, "[\(router.id)] \(message)")
     }
 }
 

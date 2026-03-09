@@ -17,16 +17,23 @@ public class Router<Route: Routable>: Routing {
 
     @ObservationIgnored var onExternalRouterDismiss: (() -> Void)?
 
-    init() {
-        logger.debug("init \(self.id)")
+    private let shouldLogInit: Bool
+
+    init(shouldLogInit: Bool = true) {
+        self.shouldLogInit = shouldLogInit
+        if shouldLogInit {
+            log("init")
+        }
     }
 
     deinit {
-        logger.debug("deinit \(self.id)")
+        if shouldLogInit {
+            log("deinit")
+        }
     }
 
     public func push(_ route: Route) {
-        logger.debug("Pushing \(String(describing: route))")
+        log("Pushing \(String(describing: route))")
         state.path.append(IdentifiableModel(value: route))
     }
 
@@ -35,13 +42,13 @@ public class Router<Route: Routable>: Routing {
         guard !state.path.isEmpty else {
             return false
         }
-        logger.debug("Popping")
+        log("Popping")
         state.path.removeLast()
         return true
     }
 
     public func popToRoot() {
-        logger.debug("Popping to route")
+        log("Popping to root")
         state.path.removeLast(state.path.count)
     }
 
@@ -86,8 +93,8 @@ public class Router<Route: Routable>: Routing {
     ) {
         stopPresenting()
 
-        logger.debug(
-            "Presenting \(style) \(String(describing: route)), routing result id: \(String(describing: result?.id))"
+        log(
+            "Presenting \(style) \(String(describing: route)), routing result id: \(result?.id.uuidString ?? "nil")"
         )
 
         state.presentationState = PresentationState(
@@ -102,7 +109,7 @@ public class Router<Route: Routable>: Routing {
             return false
         }
         let route = presentationState.routeWithResult.route
-        logger.debug("Stopping presenting \(presentationState.style) \(String(describing: route))")
+        log("Stopping presenting \(presentationState.style) \(String(describing: route))")
         state.presentationState = nil
         return true
     }
@@ -110,33 +117,37 @@ public class Router<Route: Routable>: Routing {
     @discardableResult
     public func dismiss() -> Bool {
         if stopPresenting() {
-            logger.debug("Dismiss action stopped presenting")
+            log("Dismiss action stopped presenting")
             return true
         }
 
         if pop() {
-            logger.debug("Dismiss action popped")
+            log("Dismiss action popped")
             return true
         }
 
         if externalRouterDismiss() {
-            logger.debug("Dismiss action called back on external router")
+            log("Dismiss action called back on external router")
             return true
         }
 
-        logger.debug("Dismiss action did nothing")
+        log("Dismiss action did nothing")
         return false
     }
 
     @discardableResult
     public func externalRouterDismiss() -> Bool {
         guard let onExternalRouterDismiss else {
-            logger.warning("External router dismiss is not provided")
+            log(level: .error, "External router dismiss is not provided")
             return false
         }
-        logger.debug("Calling dismiss action on external router")
+        log("Calling dismiss action on external router")
         onExternalRouterDismiss()
         return true
+    }
+
+    nonisolated private func log(level: OSLogType = .debug, _ message: String) {
+        logger.log(level: level, "[\(self.id)] \(message)")
     }
 }
 
@@ -147,11 +158,9 @@ extension Router {
         }
 
         guard let result = oldValue.routeWithResult.result else {
-            logger.debug("Completing presentation without result")
+            log("Completing presentation without result")
             return
         }
-
-        logger.debug("Completing presentation with result id: \(result.id)")
 
         Task { @MainActor in
             result.complete()
