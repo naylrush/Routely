@@ -32,11 +32,11 @@ struct PresentingView<ConvertibleRoute: ConvertibleRoutableDestination, Content:
 
     private func DestinationWrapper<WrappedContent: View>(
         routeWithResult: RouteWithResult<ConvertibleRoute>,
-        @ViewBuilder wrapping: (ConvertibleRoute.Destination) -> WrappedContent
+        @ViewBuilder wrapping: (ConvertibleRoute.Body) -> WrappedContent
     ) -> some View {
         DestinationConfigurationView(providedRoutelyResult: routeWithResult.result) {
             RootViewBuilder<ConvertibleRoute.Target>.wrap(if: routeWithResult.route.wrapToRootView) {
-                wrapping(routeWithResult.route.destination)
+                wrapping(routeWithResult.route.body)
             }
         }
     }

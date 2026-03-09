@@ -18,7 +18,7 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
     let route: FlowRoute
 
     var body: some View {
-        route.destination
+        route.body
             .environment(\.next, .init("next", action: goToNext))
     }
 

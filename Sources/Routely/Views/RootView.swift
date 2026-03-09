@@ -31,7 +31,7 @@ private struct DummyConvertibleRoute<
 
     // View
     var body: some View {
-        route.destination
+        route.body
     }
 
     var wrapToRootView: Bool {
@@ -53,10 +53,10 @@ public struct RootView<Route: RoutableDestination & WebRoutable, Content: View>:
     }
 }
 
-extension RootView where Content == Route.Destination {
+extension RootView where Content == Route.Body {
     public init(initialRoute: Route) {
         self.init {
-            initialRoute.destination
+            initialRoute.body
         }
     }
 }
