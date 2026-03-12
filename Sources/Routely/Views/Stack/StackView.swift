@@ -16,7 +16,7 @@ struct StackView<Route: RoutableDestination, Content: View>: View {
             .navigationDestination(for: IdentifiableModel<Route>.self) { identifiedRoute in
                 StackHierarchyConfigurationView(router: router, id: identifiedRoute.id) {
                     StackSubviewConfigurationView {
-                        identifiedRoute.value.body
+                        identifiedRoute.value
                     }
                 }
             }

@@ -26,9 +26,9 @@ extension Route: RoutableDestination {
         case .stackDemo: StackDemoView()
         case let .stackDetail(level): StackDetailView(level: level)
         case .creationDemo: CreationDemoView()
-        case let .creation(route): route.body
+        case let .creation(route): route
         case .resultsDemo: ResultsDemoView()
-        case let .results(route): route.body
+        case let .results(route): route
         case .webDemo: WebDemoView()
         case let .web(url): SafariView(url: url)
         }

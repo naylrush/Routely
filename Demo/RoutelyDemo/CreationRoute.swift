@@ -16,7 +16,7 @@ extension CreationRoute: RoutableDestination {
     var body: some View {
         switch self {
         case .root: FlowRootView(initialRoute: CreationFlowRoute.form)
-        case .flow(let route): route.body
+        case let .flow(route): route
         }
     }
 

@@ -22,10 +22,10 @@ struct RootContentView<ConvertibleRoute: ConvertibleRoutableDestination & WebRou
     }
 }
 
-extension RootContentView where Content == ConvertibleRoute.Body {
+extension RootContentView where Content == ConvertibleRoute {
     init(initialRoute: ConvertibleRoute) {
         self.init {
-            initialRoute.body
+            initialRoute
         }
     }
 }
