@@ -8,5 +8,14 @@ import SwiftUI
 public final class DeepLinkingManager {
     public static let shared = DeepLinkingManager()
 
-    public var pendingRawDeepLink: RawDeepLink?
+    private var pendingRawDeepLink: RawDeepLink?
+
+    func setPendingRawDeepLink(_ rawDeepLink: RawDeepLink) {
+        pendingRawDeepLink = rawDeepLink
+    }
+
+    func getPendingRawDeepLink() -> RawDeepLink? {
+        defer { pendingRawDeepLink = nil }
+        return pendingRawDeepLink
+    }
 }

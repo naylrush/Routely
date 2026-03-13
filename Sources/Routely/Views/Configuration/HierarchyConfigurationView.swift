@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct HierarchyConfigurationView<Route: Routable, Content: View>: View {
-    private let manager = RouterManager.shared
+    @State private var manager = RouterManager.shared
 
     let externalRouter: Router<Route>?
     let router: Router<Route>

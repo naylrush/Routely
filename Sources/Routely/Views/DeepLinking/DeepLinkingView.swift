@@ -12,43 +12,43 @@ struct DeepLinkingView<ConvertibleRoute: ConvertibleRoutable, Content: View>: Vi
     @Environment(\.isDeepLinkHandlingEnabled)
     private var isDeepLinkHandlingEnabled
 
-    private let manager = DeepLinkingManager.shared
-    private let registry = DeepLinkingRegistry.shared
-
     let router: ConvertibleRouter<ConvertibleRoute>
     @ViewBuilder let content: Content
 
     var body: some View {
         content
-            .task {
-                await handleDeepLinkIfPending()
+            .onChange(of: isDeepLinkHandlingEnabled && isTopHierarchy, initial: true) { _, newValue in
+                if newValue {
+                    Task {
+                        await handleDeepLinkIfPending()
+                    }
+                }
             }
             .onOpenDeepLink(
-                perform: handleDeepLink,
+                perform: handleDeepLinkIfEnabled,
                 if: isTopHierarchy
             )
     }
 
     private func handleDeepLinkIfPending() async {
-        guard
-            isTopHierarchy,
-            let rawDeepLink = manager.pendingRawDeepLink
-        else { return }
-
+        guard let rawDeepLink = DeepLinkingManager.shared.getPendingRawDeepLink() else { return }
         logger.debug("Handling pending deep link: \(rawDeepLink)")
-        manager.pendingRawDeepLink = nil
         await handleDeepLink(rawDeepLink: rawDeepLink)
     }
 
-    private func handleDeepLink(rawDeepLink: RawDeepLink) async {
-        guard isDeepLinkHandlingEnabled else {
-            manager.pendingRawDeepLink = rawDeepLink
+    private func handleDeepLinkIfEnabled(rawDeepLink: RawDeepLink) async {
+        if isDeepLinkHandlingEnabled {
+            logger.debug("Handling deep link: \(rawDeepLink)")
+            await handleDeepLink(rawDeepLink: rawDeepLink)
+        } else {
+            DeepLinkingManager.shared.setPendingRawDeepLink(rawDeepLink)
             logger.debug("Saved pending deep link: \(rawDeepLink)")
-            return
         }
+    }
 
+    private func handleDeepLink(rawDeepLink: RawDeepLink) async {
         do {
-            let handled = try await registry.handle(router: router.wrapped, rawDeepLink: rawDeepLink)
+            let handled = try await DeepLinkingRegistry.shared.handle(router: router.wrapped, rawDeepLink: rawDeepLink)
             if handled {
                 logger.debug("Handled deep link: \(rawDeepLink)")
             } else {

@@ -15,7 +15,7 @@ extension EnvironmentValues {
 
     @Entry public var routingResult: RoutelyResult = .dummy
 
-    @Entry public var isTopHierarchy = false
+    @Entry public var isTopHierarchy = true
 
     @Entry public var isLastInStack = false
 }
