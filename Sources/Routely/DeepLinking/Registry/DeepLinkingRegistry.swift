@@ -35,8 +35,8 @@ extension DeepLinkEntryProtocol {
         rawDeepLink: RawDeepLink
     ) async throws -> Bool {
         guard let router = router as? any Routing<DeepLinkType.Route>,
-              let deepLink = try await parseDeepLink(rawDeepLink: rawDeepLink) else { return false }
-        let handler = try await makeHandler()
+              let deepLink = try parseDeepLink(rawDeepLink: rawDeepLink) else { return false }
+        let handler = try makeHandler()
         try await handler.handle(router: router, deepLink: deepLink)
         return true
     }

@@ -4,21 +4,21 @@
 
 import Foundation
 
-public protocol DeepLinkEntryProtocol: Actor {
+public protocol DeepLinkEntryProtocol: Sendable {
     associatedtype DeepLinkType: DeepLink
     associatedtype DeepLinkHandler: DeepLinkHandling where DeepLinkHandler.DeepLinkType == DeepLinkType
 
-    func parseDeepLink(rawDeepLink: RawDeepLink) async throws -> DeepLinkType?
-    func makeHandler() async throws -> DeepLinkHandler
+    func parseDeepLink(rawDeepLink: RawDeepLink) throws -> DeepLinkType?
+    func makeHandler() throws -> DeepLinkHandler
 }
 
-public actor DeepLinkEntry<
-    RegexOutput,
+public struct DeepLinkEntry<
+    RegexOutput: Sendable,
     DeepLinkType: DeepLink,
     DeepLinkHandler: DeepLinkHandling
 >: DeepLinkEntryProtocol where DeepLinkHandler.DeepLinkType == DeepLinkType {
     public typealias DeepLinkBuilder = @Sendable (RegexOutput) throws -> DeepLinkType?
-    public typealias HandlerBuilder = @Sendable @MainActor () throws -> DeepLinkHandler
+    public typealias HandlerBuilder = @Sendable () throws -> DeepLinkHandler
 
     private let regex: Regex<RegexOutput>
     private let deepLink: DeepLinkBuilder
@@ -34,13 +34,15 @@ public actor DeepLinkEntry<
         self.handler = handler
     }
 
-    public func parseDeepLink(rawDeepLink: RawDeepLink) async throws -> DeepLinkType? {
+    public func parseDeepLink(rawDeepLink: RawDeepLink) throws -> DeepLinkType? {
         guard let output = try regex.wholeMatch(in: rawDeepLink.path)?.output,
               let deepLink = try deepLink(output) else { return nil }
         return deepLink
     }
 
-    public func makeHandler() async throws -> DeepLinkHandler {
-        try await handler()
+    public func makeHandler() throws -> DeepLinkHandler {
+        try handler()
     }
 }
+
+extension Regex: @unchecked Sendable where RegexOutput: Sendable {}
