@@ -47,16 +47,7 @@ struct DeepLinkingView<ConvertibleRoute: ConvertibleRoutable, Content: View>: Vi
     }
 
     private func handleDeepLink(rawDeepLink: RawDeepLink) async {
-        do {
-            let handled = try await DeepLinkingRegistry.shared.handle(router: router.wrapped, rawDeepLink: rawDeepLink)
-            if handled {
-                logger.debug("Handled deep link: \(rawDeepLink)")
-            } else {
-                logger.warning("Could not handle deep link: \(rawDeepLink)")
-            }
-        } catch {
-            logger.error("Got error while handling deep link: \(error)")
-        }
+        await DeepLinkingRegistry.shared.loggingHandle(router: router.wrapped, rawDeepLink: rawDeepLink)
     }
 }
 

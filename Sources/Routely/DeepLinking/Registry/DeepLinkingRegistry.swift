@@ -27,6 +27,22 @@ public final class DeepLinkingRegistry {
         }
         return false
     }
+
+    public func loggingHandle(
+        router: any Routing,
+        rawDeepLink: RawDeepLink
+    ) async {
+        do {
+            let handled = try await handle(router: router, rawDeepLink: rawDeepLink)
+            if handled {
+                logger.debug("Handled deep link: \(rawDeepLink)")
+            } else {
+                logger.warning("Could not handle deep link: \(rawDeepLink)")
+            }
+        } catch {
+            logger.error("Got error while handling deep link: \(error)")
+        }
+    }
 }
 
 extension DeepLinkEntryProtocol {
@@ -41,3 +57,5 @@ extension DeepLinkEntryProtocol {
         return true
     }
 }
+
+private let logger = Logger(subsystem: "Routely", category: "DeepLinking")
