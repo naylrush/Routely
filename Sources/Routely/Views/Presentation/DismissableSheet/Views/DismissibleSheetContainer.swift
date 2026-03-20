@@ -92,34 +92,42 @@ extension View {
     }
 }
 
-//#Preview("Default behavior") {
-//    @Previewable @State var isPresented = false
-//
-//    PreviewRootViewBuilder<PreviewRoute>.make {
-//        Button("Show bottom sheet") {
-//            isPresented = true
-//        }
-//        .dismissibleSheet(
-//            isPresented: $isPresented,
-//            behavior: .constant(.default)
-//        ) {
-//            Text(Int.random(in: 0..<100).description)
-//        }
-//    }
-//}
-//
-//#Preview("Requires confirmation behavior") {
-//    @Previewable @State var isPresented = false
-//
-//    PreviewRootViewBuilder<PreviewRoute>.make {
-//        Button("Show bottom sheet") {
-//            isPresented = true
-//        }
-//        .dismissibleSheet(
-//            isPresented: $isPresented,
-//            behavior: .constant(.requiresConfirmation(.init(confirmActionTitle: "Закрыть")))
-//        ) {
-//            Text("Content")
-//        }
-//    }
-//}
+private enum PreviewRoute: Routable {
+    case view
+}
+
+extension PreviewRoute: WebRoutable {
+    init?(url: URL) { nil }
+}
+
+#Preview("Default behavior") {
+    @Previewable @State var isPresented = false
+
+    PreviewRootViewBuilder<PreviewRoute>.make {
+        Button("Show bottom sheet") {
+            isPresented = true
+        }
+        .dismissibleSheet(
+            isPresented: $isPresented,
+            behavior: .constant(.default)
+        ) {
+            Text("Content")
+        }
+    }
+}
+
+#Preview("Requires confirmation behavior") {
+    @Previewable @State var isPresented = false
+
+    PreviewRootViewBuilder<PreviewRoute>.make {
+        Button("Show bottom sheet") {
+            isPresented = true
+        }
+        .dismissibleSheet(
+            isPresented: $isPresented,
+            behavior: .constant(.requiresConfirmation(.init(confirmActionTitle: "Закрыть")))
+        ) {
+            Text("Content")
+        }
+    }
+}
