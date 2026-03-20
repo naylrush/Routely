@@ -5,7 +5,7 @@
 import SwiftUI
 
 extension View {
-    func fullScreen<Item: Sendable, Content: View>(
+    public func fullScreen<Item: Sendable, Content: View>(
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View {
@@ -16,7 +16,18 @@ extension View {
         }
     }
 
-    func dismissibleSheet<Item: Sendable, Content: View>(
+    public func sheet<Item: Sendable, Content: View>(
+        item: Binding<Item?>,
+        @ViewBuilder content: @escaping (Item) -> Content
+    ) -> some View {
+        sheet(isPresented: item.isNotNil()) {
+            if let item = item.wrappedValue {
+                content(item)
+            }
+        }
+    }
+
+    public func dismissibleSheet<Item: Sendable, Content: View>(
         item: Binding<Item?>,
         behavior: Binding<SheetDismissalBehavior>,
         @ViewBuilder content: @escaping (Item) -> Content
