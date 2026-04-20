@@ -45,4 +45,4 @@ public struct DeepLinkEntry<
     }
 }
 
-extension Regex: @unchecked Sendable where RegexOutput: Sendable {}
+extension Regex: @retroactive @unchecked Sendable where RegexOutput: Sendable {}

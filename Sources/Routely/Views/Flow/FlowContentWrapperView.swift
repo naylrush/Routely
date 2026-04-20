@@ -78,7 +78,7 @@ struct FlowContentWrapperView<FlowRoute: FlowRoutableDestination>: View {
         goTo(nextFlowRoute)
     }
 
-    nonisolated private func log(level: OSLogType = .debug, _ message: String) {
+    private func log(level: OSLogType = .debug, _ message: String) {
         logger.log(level: level, "[\(router.id)] \(message)")
     }
 }

@@ -28,7 +28,7 @@ public struct RoutelyAction<T>: Sendable {
         self.label = ""
         self.isDummy = true
         self.action = { [label, id] _ in
-            logger.error("[\(id)] Dummy routing action is called")
+            logger.error("[\(id)][\(label)] Dummy routing action is called")
         }
     }
 
