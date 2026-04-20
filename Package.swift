@@ -3,8 +3,6 @@
 
 import PackageDescription
 
-let swiftLintPlugin: PackageDescription.Target.PluginUsage = .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
-
 let package = Package(
     name: "Routely",
     platforms: [
@@ -17,14 +15,12 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.63.2"),
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.8.0"),
     ],
     targets: [
         .target(
             name: "Routely",
             dependencies: ["DeviceKit"],
-            plugins: [swiftLintPlugin]
         ),
     ]
 )
